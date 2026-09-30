@@ -23,7 +23,7 @@ Supporting: `types.ts` (data model), `steps.ts` (screen sequence derived from co
 ## Brand + copy conventions
 - Colors only: navy `#0F1E2E`, strategic `#1F3F3A`, amber `#C96F1A`, offwhite `#F4F2ED`, graphite `#2B2F36` (Tailwind tokens in `src/styles.css`). Target ~70% navy / 20% offwhite / 10% green; amber is an accent (CTA, progress line, active markers) only.
 - Sora for headings, Inter for body. `eyebrow` is a custom Tailwind utility; override its size with the suffix important syntax (`text-[10px]!`).
-- All participant-facing copy is PT-BR. Keep in English only: WorkSpeak™, Communication Readiness Map, and the dimension labels (paired with PT-BR via `dimensionName()`, e.g. "Clarity — Clareza"). Profiles have an internal English `patternName` and a displayed PT-BR `patternLabel`.
+- All participant-facing copy is PT-BR. Keep in English only: WorkSpeak™, Communication Readiness Map, and the five dimension labels, shown in English only via `dimensionName()` (e.g. "Clarity"; descriptions stay PT-BR). Profiles have an internal English `patternName` and a displayed PT-BR `patternLabel`.
 - Sunset Languages is the parent brand in the header, shown with the official logo (`public/brand/sunset-languages-logo.png`, navy canvas trimmed only — do not recreate it as text). WorkSpeak™ appears as a typographic label only — never create a WorkSpeak logo or palette.
 - Lines/markers/grids, not rounded cards, shadows, gradients, badges or gamification.
 - Never display numeric scores. Result language must stay hypothesis-framed ("Suas respostas sugerem…", "pode", "vale observar se…") and must never claim English knowledge/proficiency was measured. Never claim validation, proficiency level or diagnosis.
@@ -33,4 +33,5 @@ Supporting: `types.ts` (data model), `steps.ts` (screen sequence derived from co
 - One question per screen; `STEPS` is derived from `QUESTIONS_BY_SECTION`, so adding/removing items needs no UI changes.
 - Option order in readiness items is intentionally mixed so answers don't read good → bad.
 - Native radio/checkbox inputs (visually hidden) provide keyboard access; focus moves to each screen's `h1` on step change.
-- Bootcamp link is a placeholder (`BOOTCAMP_URL` in content.ts).
+- Bootcamp fit (`result.nextStep`, sheet column `bootcampFit`) is internal only: never show fit/Bootcamp copy to participants. The public next step is the same for everyone (`RESULT_COPY.nextFocus`). `BOOTCAMP_URL` / `NEXT_STEP_COPY` are unused placeholders.
+- The result email includes a table-based dimension map driven by `result.dimensions` + `DIMENSION_STATES`, the same source as the web map (no SVG/JS).

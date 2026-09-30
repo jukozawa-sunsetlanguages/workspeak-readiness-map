@@ -166,6 +166,11 @@ export const BROADLY_STABLE_PROFILE: Profile = {
   },
 }
 
+/**
+ * Bootcamp-fit copy. NOT participant-facing: fit is computed and stored for
+ * internal research only (see `bootcampFit` in the sheet). Participants see
+ * `RESULT_COPY.nextFocus` instead. Kept for reference.
+ */
 export const NEXT_STEP_COPY = {
   fit: {
     headline: 'Quer observar esse padrão em prática?',

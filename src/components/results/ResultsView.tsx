@@ -1,12 +1,10 @@
 import type { ReactNode } from 'react'
 import {
-  BOOTCAMP_URL,
   BRAND,
   RESULT_COPY,
   TRAINING_READINESS_LABELS,
   dimensionName,
 } from '../../assessment/content'
-import { NEXT_STEP_COPY } from '../../assessment/profiles'
 import type { MapResult } from '../../assessment/types'
 import DimensionMap from './DimensionMap'
 import EvidencePath from './EvidencePath'
@@ -28,7 +26,6 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
 ) {
   const label = dimensionName
   const readiness = TRAINING_READINESS_LABELS[result.trainingReadiness]
-  const next = result.nextStep
 
   return (
     <div className="step-in">
@@ -68,11 +65,10 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
       </ResultBand>
 
       {/* C. DIMENSION MAP */}
-      <ResultBand tone="strategic" label="Seu mapa">
-        <h2 className="text-2xl font-semibold sm:text-3xl">Cinco dimensões de trabalho</h2>
+      <ResultBand tone="strategic" label={RESULT_COPY.map.label}>
+        <h2 className="text-2xl font-semibold sm:text-3xl">{RESULT_COPY.map.title}</h2>
         <p className="mt-3 mb-10 max-w-2xl text-[15px] leading-relaxed text-offwhite/75">
-          Leituras qualitativas baseadas no que você relatou. Elas descrevem comportamentos
-          relatados, não desempenho medido.
+          {RESULT_COPY.map.note}
         </p>
         <DimensionMap dimensions={result.dimensions} primary={result.primary} secondary={result.secondary} />
       </ResultBand>
@@ -164,27 +160,17 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
         </div>
       </ResultBand>
 
-      {/* CONDITIONAL NEXT STEP */}
+      {/* NEXT FOCUS — the same for everyone. Bootcamp fit is internal only
+          (result.nextStep is stored for research, never shown). */}
       <ResultBand label={RESULT_COPY.nextStep}>
-        {next.kind === 'bootcamp-fit' ? (
-          <div className="max-w-2xl">
-            <h2 className="text-2xl font-semibold sm:text-3xl">{NEXT_STEP_COPY.fit.headline}</h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-offwhite/80">{NEXT_STEP_COPY.fit.body}</p>
-            <a
-              href={BOOTCAMP_URL}
-              className="mt-8 inline-block bg-amber px-7 py-4 text-[15px] font-medium text-navy transition-colors hover:bg-amber/90"
-            >
-              {NEXT_STEP_COPY.fit.cta} →
-            </a>
-          </div>
-        ) : (
-          <div className="max-w-2xl">
-            <h2 className="text-2xl font-semibold sm:text-3xl">{NEXT_STEP_COPY.notYet.headline}</h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-offwhite/80">
-              {NEXT_STEP_COPY.notYet.reasons[next.reason]}
+        <div className="max-w-2xl">
+          <h2 className="text-2xl font-semibold sm:text-3xl">{RESULT_COPY.nextFocus.title}</h2>
+          {RESULT_COPY.nextFocus.body.map((paragraph) => (
+            <p key={paragraph} className="mt-4 text-[16px] leading-relaxed text-offwhite/80">
+              {paragraph}
             </p>
-          </div>
-        )}
+          ))}
+        </div>
       </ResultBand>
 
       {/* Footer: epistemic limit + controls */}

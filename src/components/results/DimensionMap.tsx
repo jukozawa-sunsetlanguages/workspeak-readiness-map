@@ -1,4 +1,4 @@
-import { DIMENSIONS, DIMENSION_STATES, dimensionName } from '../../assessment/content'
+import { DIMENSIONS, DIMENSION_STATES, RESULT_COPY, dimensionName } from '../../assessment/content'
 import type { DimensionId, DimensionReading } from '../../assessment/types'
 import { cx } from '../cx'
 
@@ -60,7 +60,7 @@ export default function DimensionMap({ dimensions, primary, secondary }: Props) 
                   {dimensionName(d.id)}
                   {(isPrimary || isSecondary) && (
                     <span className={cx('eyebrow text-[10px]!', isPrimary ? 'text-offwhite' : 'text-offwhite/70')}>
-                      {isPrimary ? '· Prioritário para observar' : '· Secundário'}
+                      · {isPrimary ? RESULT_COPY.map.primaryTag : RESULT_COPY.map.secondaryTag}
                     </span>
                   )}
                 </p>

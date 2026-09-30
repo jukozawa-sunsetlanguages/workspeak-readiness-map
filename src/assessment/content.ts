@@ -115,45 +115,39 @@ export const SECTION_META: Record<
 }
 
 /**
- * Dimension names stay in English as methodological labels, paired with
- * PT-BR for clarity.
+ * Dimension names stay in English as methodological labels; the explanatory
+ * question is PT-BR.
  */
 export const DIMENSIONS: Record<
   DimensionId,
-  { label: string; labelPt: string; question: string }
+  { label: string; question: string }
 > = {
   clarity: {
     label: 'Clarity',
-    labelPt: 'Clareza',
     question: 'Você consegue transformar uma ideia em uma mensagem que outra pessoa acompanha?',
   },
   interaction: {
     label: 'Interaction',
-    labelPt: 'Interação',
     question: 'Você consegue responder, esclarecer, se recuperar e sustentar uma troca?',
   },
   access: {
     label: 'Access Under Pressure',
-    labelPt: 'Acesso sob pressão',
     question:
       'Você consegue acessar o inglês que já conhece quando tempo, incerteza ou interação criam pressão?',
   },
   independence: {
     label: 'Independence',
-    labelPt: 'Independência',
     question: 'De quanto suporte você precisa antes ou durante a comunicação?',
   },
   transfer: {
     label: 'Transfer',
-    labelPt: 'Transferência',
     question:
       'O que você pratica aparece no contexto profissional em que realmente importa?',
   },
 }
 
-/** "Clarity — Clareza" */
-export const dimensionName = (id: DimensionId) =>
-  `${DIMENSIONS[id].label} — ${DIMENSIONS[id].labelPt}`
+/** Participant-facing dimension name: the English methodological label only. */
+export const dimensionName = (id: DimensionId) => DIMENSIONS[id].label
 
 export const DIMENSION_ORDER: DimensionId[] = [
   'clarity',
@@ -240,7 +234,22 @@ export const RESULT_COPY = {
     title: 'O que valeria observar agora?',
     body: 'Este Map parte do que você relatou sobre sua comunicação e cria uma hipótese inicial. A performance real de comunicação pode oferecer evidências mais fortes. Uma tarefa curta de performance pode ajudar a observar se esse mesmo padrão aparece quando você precisa usar inglês em tempo real.',
   },
+  map: {
+    label: 'Seu mapa',
+    title: 'Cinco dimensões de trabalho',
+    note: 'Leituras qualitativas baseadas no que você relatou. Elas descrevem comportamentos relatados, não desempenho medido.',
+    primaryTag: 'Prioritário para observar',
+    secondaryTag: 'Secundário',
+  },
   nextStep: 'Próximo passo',
+  /** Methodology-level next step, identical for every participant. */
+  nextFocus: {
+    title: 'Seu próximo foco',
+    body: [
+      'Este mapa é uma leitura inicial baseada no que você relatou sobre sua comunicação. Seu próximo passo é observar como esse padrão aparece em situações reais e produzir evidências de performance.',
+      'A partir daqui, práticas, ferramentas ou experiências WorkSpeak podem ajudar você a trabalhar o padrão identificado e comparar percepção com desempenho real.',
+    ],
+  },
   methodNote:
     'Este Map é baseado em autorrelato. Não é um teste de proficiência em inglês, uma avaliação CEFR nem um instrumento psicométrico validado. Considere-o uma hipótese de trabalho inicial.',
 }

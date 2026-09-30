@@ -4,13 +4,13 @@
  * inline styles for broad email-client support.
  */
 import {
-  BOOTCAMP_URL,
   BRAND,
+  DIMENSIONS,
+  DIMENSION_STATES,
   RESULT_COPY,
   TRAINING_READINESS_LABELS,
   dimensionName,
 } from '../assessment/content'
-import { NEXT_STEP_COPY } from '../assessment/profiles'
 import type { MapResult } from '../assessment/types'
 
 export const EMAIL_SUBJECT = `Seu ${BRAND.system} ${BRAND.product}`
@@ -37,10 +37,38 @@ const BODY = "'Inter', 'Segoe UI', Helvetica, Arial, sans-serif"
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]!)
 
+interface DimensionRow {
+  name: string
+  question: string
+  stateLabel: string
+  /** Position on the DIMENSION_STATES scale (0 = A observar … 3 = Mais estável). */
+  position: number
+  tag: string
+  primary: boolean
+}
+
 interface Section {
   label: string
   value?: string
   body?: string
+  map?: DimensionRow[]
+}
+
+/** The web DimensionMap's rows, from the same result states and scale. */
+function dimensionRows(result: MapResult): DimensionRow[] {
+  return result.dimensions.map((d) => ({
+    name: dimensionName(d.id),
+    question: DIMENSIONS[d.id].question,
+    stateLabel: DIMENSION_STATES.find((s) => s.id === d.state)!.label,
+    position: DIMENSION_STATES.findIndex((s) => s.id === d.state),
+    tag:
+      d.id === result.primary
+        ? RESULT_COPY.map.primaryTag
+        : d.id === result.secondary
+          ? RESULT_COPY.map.secondaryTag
+          : '',
+    primary: d.id === result.primary,
+  }))
 }
 
 /** Everything the email shows, in order. Shared by the HTML and text parts. */
@@ -57,6 +85,7 @@ function sections(result: MapResult): Section[] {
   if (result.secondary) list.push({ label: RESULT_COPY.secondary, value: dimensionName(result.secondary) })
   list.push(
     { label: RESULT_COPY.observation, body: result.observation },
+    { label: RESULT_COPY.map.label, value: RESULT_COPY.map.title, body: RESULT_COPY.map.note, map: dimensionRows(result) },
     { label: RESULT_COPY.hypothesis, body: result.hypothesis },
     {
       label: RESULT_COPY.trainingPriority,
@@ -69,17 +98,43 @@ function sections(result: MapResult): Section[] {
   return list
 }
 
-function nextStep(result: MapResult) {
-  if (result.nextStep.kind === 'bootcamp-fit') {
-    // The CTA is only rendered once BOOTCAMP_URL is a real absolute link.
-    const url = /^https?:\/\//.test(BOOTCAMP_URL) ? BOOTCAMP_URL : null
-    return { headline: NEXT_STEP_COPY.fit.headline, body: NEXT_STEP_COPY.fit.body, cta: url ? { url, label: NEXT_STEP_COPY.fit.cta } : null }
+const TRACK = '#E4E1DA'
+
+/**
+ * Email-safe dimension map: nested tables, bgcolor + inline styles, no SVG.
+ * Each row fills a four-segment scale up to its qualitative state, mirroring
+ * the line-and-marker map on the Results page. Amber marks the priority row.
+ */
+function mapHtml(rows: DimensionRow[]): string {
+  const n = DIMENSION_STATES.length
+  const cellWidth = `${100 / n}%`
+  // Scale endpoints only: each row names its own state, and four labels do
+  // not fit a phone-width column.
+  const legend = `font-family:${BODY};font-size:10px;line-height:1.3;letter-spacing:0.8px;text-transform:uppercase;color:${C.graphite};padding:0 0 6px 0;`
+  const scale = `<td width="50%" style="${legend}">${esc(DIMENSION_STATES[0].label)}</td><td width="50%" style="${legend}text-align:right;">${esc(DIMENSION_STATES[n - 1].label)}</td>`
+  const row = (r: DimensionRow) => {
+    const fill = r.primary ? C.amber : C.navy
+    const segments = DIMENSION_STATES.map((_, i) => {
+      const color = i <= r.position ? fill : TRACK
+      return `<td width="${cellWidth}" height="6" bgcolor="${color}" style="height:6px;line-height:6px;font-size:0;background:${color};${i > 0 ? 'border-left:3px solid #FFFFFF;' : ''}">&nbsp;</td>`
+    }).join('')
+    return `
+<tr><td style="padding:16px 0;border-top:1px solid #E4E1DA;">
+  <p style="margin:0;font-family:${HEADING};font-size:15px;line-height:1.35;font-weight:600;color:${C.navy};">${esc(r.name)}${
+    r.tag
+      ? ` <span style="font-family:${BODY};font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:${r.primary ? C.amber : C.graphite};">&middot; ${esc(r.tag)}</span>`
+      : ''
+  }</p>
+  <p style="margin:4px 0 10px 0;font-family:${BODY};font-size:13px;line-height:1.5;color:${C.graphite};">${esc(r.question)}</p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${segments}</tr></table>
+  <p style="margin:8px 0 0 0;font-family:${BODY};font-size:13px;font-weight:600;color:${C.navy};">${esc(r.stateLabel)}</p>
+</td></tr>`
   }
-  return {
-    headline: NEXT_STEP_COPY.notYet.headline,
-    body: NEXT_STEP_COPY.notYet.reasons[result.nextStep.reason],
-    cta: null,
-  }
+  return `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;">
+  <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${scale}</tr></table></td></tr>
+  ${rows.map(row).join('')}
+</table>`
 }
 
 function sectionHtml(s: Section): string {
@@ -88,13 +143,13 @@ function sectionHtml(s: Section): string {
   <p style="margin:0;font-family:${BODY};font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:${C.graphite};">${esc(s.label)}</p>
   ${s.value ? `<p style="margin:8px 0 0 0;font-family:${HEADING};font-size:18px;line-height:1.35;font-weight:600;color:${C.navy};">${esc(s.value)}</p>` : ''}
   ${s.body ? `<p style="margin:8px 0 0 0;font-family:${BODY};font-size:15px;line-height:1.6;color:${C.graphite};">${esc(s.body)}</p>` : ''}
+  ${s.map ? mapHtml(s.map) : ''}
   <div style="height:22px;line-height:22px;font-size:0;">&nbsp;</div>
 </td></tr>`
 }
 
 export function renderResultEmail(result: MapResult, firstName: string): { subject: string; html: string; text: string } {
   const list = sections(result)
-  const next = nextStep(result)
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -126,15 +181,8 @@ export function renderResultEmail(result: MapResult, firstName: string): { subje
 
 <tr><td style="background:${C.strategic};padding:28px 32px;">
   <p style="margin:0;font-family:${BODY};font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#C9D3CF;">${esc(RESULT_COPY.nextStep)}</p>
-  <p style="margin:10px 0 0 0;font-family:${HEADING};font-size:18px;line-height:1.35;font-weight:600;color:${C.offwhite};">${esc(next.headline)}</p>
-  <p style="margin:10px 0 0 0;font-family:${BODY};font-size:15px;line-height:1.6;color:#E4E7E5;">${esc(next.body)}</p>
-  ${
-    next.cta
-      ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;"><tr><td style="background:${C.amber};">
-  <a href="${esc(next.cta.url)}" style="display:inline-block;padding:14px 22px;font-family:${BODY};font-size:15px;font-weight:600;color:${C.navy};text-decoration:none;">${esc(next.cta.label)} &rarr;</a>
-</td></tr></table>`
-      : ''
-  }
+  <p style="margin:10px 0 0 0;font-family:${HEADING};font-size:18px;line-height:1.35;font-weight:600;color:${C.offwhite};">${esc(RESULT_COPY.nextFocus.title)}</p>
+  ${RESULT_COPY.nextFocus.body.map((p) => `<p style="margin:10px 0 0 0;font-family:${BODY};font-size:15px;line-height:1.6;color:#E4E7E5;">${esc(p)}</p>`).join('')}
 </td></tr>
 
 <tr><td style="padding:20px 32px;">
@@ -155,13 +203,18 @@ export function renderResultEmail(result: MapResult, firstName: string): { subje
     EMAIL_COPY.greeting(firstName),
     EMAIL_COPY.intro,
     '',
-    ...list.flatMap((s) => [s.label.toUpperCase(), ...(s.value ? [s.value] : []), ...(s.body ? [s.body] : []), '']),
+    ...list.flatMap((s) => [
+      s.label.toUpperCase(),
+      ...(s.value ? [s.value] : []),
+      ...(s.body ? [s.body] : []),
+      ...(s.map ?? []).map((r) => `- ${r.name}: ${r.stateLabel}${r.tag ? ` (${r.tag.toLowerCase()})` : ''}`),
+      '',
+    ]),
     EMAIL_COPY.methodNote,
     '',
     RESULT_COPY.nextStep.toUpperCase(),
-    next.headline,
-    next.body,
-    ...(next.cta ? [`${next.cta.label}: ${next.cta.url}`] : []),
+    RESULT_COPY.nextFocus.title,
+    ...RESULT_COPY.nextFocus.body,
     '',
     `${BRAND.parent} · ${BRAND.principle}`,
   ].join('\n')
