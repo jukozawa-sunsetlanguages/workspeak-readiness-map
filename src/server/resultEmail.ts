@@ -10,6 +10,7 @@ import {
   RESULT_COPY,
   TRAINING_READINESS_LABELS,
   dimensionName,
+  whatsappUrl,
 } from '../assessment/content'
 import type { MapResult } from '../assessment/types'
 
@@ -150,6 +151,7 @@ function sectionHtml(s: Section): string {
 
 export function renderResultEmail(result: MapResult, firstName: string): { subject: string; html: string; text: string } {
   const list = sections(result)
+  const conversationUrl = whatsappUrl()
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -183,6 +185,16 @@ export function renderResultEmail(result: MapResult, firstName: string): { subje
   <p style="margin:0;font-family:${BODY};font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#C9D3CF;">${esc(RESULT_COPY.nextStep)}</p>
   <p style="margin:10px 0 0 0;font-family:${HEADING};font-size:18px;line-height:1.35;font-weight:600;color:${C.offwhite};">${esc(RESULT_COPY.nextFocus.title)}</p>
   ${RESULT_COPY.nextFocus.body.map((p) => `<p style="margin:10px 0 0 0;font-family:${BODY};font-size:15px;line-height:1.6;color:#E4E7E5;">${esc(p)}</p>`).join('')}
+  ${
+    conversationUrl
+      ? `<div style="margin:24px 0 0 0;height:1px;line-height:1px;font-size:0;background:#3A5752;">&nbsp;</div>
+  <p style="margin:22px 0 0 0;font-family:${HEADING};font-size:16px;line-height:1.4;font-weight:600;color:${C.offwhite};">${esc(RESULT_COPY.conversation.title)}</p>
+  <p style="margin:8px 0 0 0;font-family:${BODY};font-size:15px;line-height:1.6;color:#E4E7E5;">${esc(RESULT_COPY.conversation.body)}</p>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;"><tr><td bgcolor="${C.amber}" style="background:${C.amber};">
+  <a href="${esc(conversationUrl)}" target="_blank" style="display:inline-block;padding:14px 22px;font-family:${BODY};font-size:15px;font-weight:600;color:${C.navy};text-decoration:none;">${esc(RESULT_COPY.conversation.cta)}</a>
+</td></tr></table>`
+      : ''
+  }
 </td></tr>
 
 <tr><td style="padding:20px 32px;">
@@ -215,6 +227,9 @@ export function renderResultEmail(result: MapResult, firstName: string): { subje
     RESULT_COPY.nextStep.toUpperCase(),
     RESULT_COPY.nextFocus.title,
     ...RESULT_COPY.nextFocus.body,
+    ...(conversationUrl
+      ? ['', RESULT_COPY.conversation.title, RESULT_COPY.conversation.body, `${RESULT_COPY.conversation.cta.replace(/\s*→$/, '')}: ${conversationUrl}`]
+      : []),
     '',
     `${BRAND.parent} · ${BRAND.principle}`,
   ].join('\n')

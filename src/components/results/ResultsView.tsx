@@ -4,6 +4,7 @@ import {
   RESULT_COPY,
   TRAINING_READINESS_LABELS,
   dimensionName,
+  whatsappUrl,
 } from '../../assessment/content'
 import type { MapResult } from '../../assessment/types'
 import DimensionMap from './DimensionMap'
@@ -26,6 +27,7 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
 ) {
   const label = dimensionName
   const readiness = TRAINING_READINESS_LABELS[result.trainingReadiness]
+  const conversationUrl = whatsappUrl()
 
   return (
     <div className="step-in">
@@ -170,6 +172,20 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
               {paragraph}
             </p>
           ))}
+          {conversationUrl && (
+            <div className="mt-10 border-t border-offwhite/12 pt-8">
+              <h3 className="text-lg leading-snug font-semibold sm:text-xl">{RESULT_COPY.conversation.title}</h3>
+              <p className="mt-3 text-[15px] leading-relaxed text-offwhite/80">{RESULT_COPY.conversation.body}</p>
+              <a
+                href={conversationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-block bg-amber px-7 py-4 text-[15px] font-medium text-navy transition-colors hover:bg-amber/90"
+              >
+                {RESULT_COPY.conversation.cta}
+              </a>
+            </div>
+          )}
         </div>
       </ResultBand>
 

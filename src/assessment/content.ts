@@ -19,6 +19,23 @@ export const BRAND = {
   logo: { src: '/brand/sunset-languages-logo.png', width: 480, height: 168 },
 }
 
+/**
+ * Official WhatsApp number for the result conversation CTA: digits only, with
+ * country and area code (e.g. 55 + DDD + number). NOT YET PROVIDED. While it
+ * is empty, the CTA is hidden on the Results page and in the email, so no
+ * dead or placeholder link is ever shown.
+ */
+export const WHATSAPP_NUMBER = ''
+
+export const WHATSAPP_MESSAGE =
+  'Oi, Ju! Fiz o Communication Readiness Map e quero entender quais práticas WorkSpeak fazem sentido para o meu resultado.'
+
+/** wa.me click-to-chat link with the pre-filled message, or null if unset. */
+export function whatsappUrl(): string | null {
+  const digits = WHATSAPP_NUMBER.replace(/\D/g, '')
+  return digits ? `https://wa.me/${digits}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}` : null
+}
+
 /** Placeholder destination until the Bootcamp page exists. */
 export const BOOTCAMP_URL = '#bootcamp'
 
@@ -249,6 +266,12 @@ export const RESULT_COPY = {
       'Este mapa é uma leitura inicial baseada no que você relatou sobre sua comunicação. Seu próximo passo é observar como esse padrão aparece em situações reais e produzir evidências de performance.',
       'A partir daqui, práticas, ferramentas ou experiências WorkSpeak podem ajudar você a trabalhar o padrão identificado e comparar percepção com desempenho real.',
     ],
+  },
+  /** Same for every participant; links to `whatsappUrl()`. */
+  conversation: {
+    title: 'Quer trabalhar o padrão que apareceu no seu mapa?',
+    body: 'As práticas e ferramentas WorkSpeak são desenhadas para transformar padrões como este em treino aplicado a situações profissionais reais.',
+    cta: 'Quero entender meu próximo passo →',
   },
   methodNote:
     'Este Map é baseado em autorrelato. Não é um teste de proficiência em inglês, uma avaliação CEFR nem um instrumento psicométrico validado. Considere-o uma hipótese de trabalho inicial.',
