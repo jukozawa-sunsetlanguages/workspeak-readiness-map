@@ -10,14 +10,14 @@ interface Props {
 }
 
 const FIELDS: {
-  key: keyof ContactDetails
+  key: Exclude<keyof ContactDetails, 'marketingConsent'>
   label: string
   type: string
   autoComplete: string
 }[] = [
-  { key: 'firstName', label: 'First name', type: 'text', autoComplete: 'given-name' },
-  { key: 'email', label: 'Email', type: 'email', autoComplete: 'email' },
-  { key: 'role', label: 'Job role / professional area', type: 'text', autoComplete: 'organization-title' },
+  { key: 'firstName', label: CONTACT_COPY.fields.firstName, type: 'text', autoComplete: 'given-name' },
+  { key: 'email', label: CONTACT_COPY.fields.email, type: 'email', autoComplete: 'email' },
+  { key: 'role', label: CONTACT_COPY.fields.role, type: 'text', autoComplete: 'organization-title' },
 ]
 
 const ContactScreen = forwardRef<HTMLHeadingElement, Props>(function ContactScreen(
@@ -69,7 +69,18 @@ const ContactScreen = forwardRef<HTMLHeadingElement, Props>(function ContactScre
         })}
       </div>
 
-      <p className="mt-8 text-xs leading-relaxed text-offwhite/60">{CONTACT_COPY.privacy}</p>
+      <p className="mt-8 text-sm leading-relaxed text-offwhite/75">{CONTACT_COPY.privacy}</p>
+
+      {/* Optional and unchecked by default; result delivery never depends on it. */}
+      <label className="mt-6 flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-offwhite/80">
+        <input
+          type="checkbox"
+          checked={contact.marketingConsent}
+          onChange={(e) => onChange({ ...contact, marketingConsent: e.target.checked })}
+          className="mt-[3px] h-4 w-4 shrink-0 cursor-pointer accent-amber"
+        />
+        <span>{CONTACT_COPY.marketingConsent}</span>
+      </label>
     </div>
   )
 })

@@ -25,7 +25,13 @@ import type {
   TrainingReadinessLevel,
 } from './types'
 
-/* Thresholds on a 0–3 mean. */
+/*
+ * These weights rank self-reported response patterns for MVP interpretation.
+ * They do not represent interval measurement, validated severity, proficiency
+ * or psychometric scoring.
+ *
+ * Thresholds on a 0–3 mean.
+ */
 const STATE_THRESHOLDS: { min: number; state: DimensionState }[] = [
   { min: 2.5, state: 'strong' },
   { min: 1.75, state: 'functional' },
@@ -122,29 +128,33 @@ export function buildMapResult(responses: Responses): MapResult {
   // Stable sort keeps DIMENSION_ORDER as the tie-breaker.
   const ascending = [...dimensions].sort((a, b) => a.mean - b.mean)
   const strongest = [...dimensions].sort((a, b) => b.mean - a.mean)[0].id
-  const primary: DimensionId = ascending[0].id
+  const lowest: DimensionId = ascending[0].id
   const secondCandidate = ascending[1]
   const secondary =
     secondCandidate && secondCandidate.state !== 'strong' && secondCandidate.id !== strongest
       ? secondCandidate.id
       : null
 
+  // When every dimension is Strong, one dimension is still numerically lowest,
+  // but that is not a reported breakdown: no primary pattern is named and the
+  // broadly-stable profile supplies all copy, including work examples.
   const allStrong = dimensions.every((d) => d.state === 'strong')
-  const profile = PROFILES[primary]
-  const base = allStrong ? BROADLY_STABLE_PROFILE : profile
+  const base = allStrong ? BROADLY_STABLE_PROFILE : PROFILES[lowest]
+  const primary = allStrong ? null : lowest
 
   const trainingReadiness = readTrainingReadiness(responses.training)
   const [obstacles, focus] = FRICTION_QUESTIONS
 
   return {
     patternName: base.patternName,
+    patternLabel: base.patternLabel,
     observation: base.observation,
     dimensions,
     strongest,
     primary,
     secondary,
     hypothesis: base.hypothesis,
-    workExamples: pickWorkExamples(profile.workExamples, responses),
+    workExamples: pickWorkExamples(base.workExamples, responses),
     trainingPriority: base.trainingPriority,
     trainingReadiness,
     perceivedFriction: labelsFor(obstacles, responses.friction),

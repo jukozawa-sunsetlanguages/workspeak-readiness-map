@@ -1,14 +1,19 @@
 /**
- * Result copy, keyed by the PRIMARY pattern to observe.
+ * Result copy, keyed by the PRIMARY pattern to observe (participant copy in PT-BR).
  *
  * PLACEHOLDER PROFILES — REQUIRE WORKSPEAK REVIEW BEFORE COMMERCIAL USE.
- * All language is hypothesis-framed ("may", "suggest", "based on what you
- * reported"). Keep it that way when editing: this Map is self-report only.
+ * This Map is self-report only. Keep all language hypothesis-framed
+ * ("Suas respostas sugerem…", "pode", "vale observar se…") and never claim
+ * that English knowledge, proficiency, confidence or motivation was measured.
+ *
+ * `patternName` is the internal WorkSpeak profile name (kept in English for
+ * data/methodology); `patternLabel` is the participant-facing PT-BR label.
  */
 import type { ContextKey, DimensionId } from './types'
 
 export interface Profile {
   patternName: string
+  patternLabel: string
   observation: string
   hypothesis: string
   trainingPriority: { title: string; detail: string }
@@ -18,148 +23,172 @@ export interface Profile {
 export const PROFILES: Record<DimensionId, Profile> = {
   access: {
     patternName: 'Knowledge-rich, Access-limited',
+    patternLabel: 'Padrão sensível ao acesso sob pressão',
     observation:
-      'Your answers suggest that the language is often there, but reaching it takes longer when time is short or the conversation moves quickly. Based on what you reported, the delay appears between knowing what you want to say and being able to say it.',
+      'Entre os comportamentos explorados neste Map, suas respostas apontaram com mais frequência para situações de acesso sob pressão: momentos em que o tempo é curto ou a conversa avança rápido. Você relatou com mais frequência pausas, respostas mais curtas ou ideias deixadas de lado nesses momentos.',
     hypothesis:
-      'Your answers suggest that English knowledge may not be the main constraint. The pattern appears more strongly when you need to retrieve and organize language quickly during interaction.',
+      'Uma hipótese de trabalho é que parte da sua comunicação fique menos disponível quando você precisa recuperar e organizar o inglês em tempo real. Vale observar se esse padrão aparece com mais força em perguntas inesperadas do que em situações que você consegue preparar.',
     trainingPriority: {
-      title: 'Faster retrieval + structured spontaneous response',
+      title: 'Início rápido de resposta + estrutura simples em tempo real',
       detail:
-        'The behavior worth testing is how quickly you can start a response with a simple structure and keep it going, even when the exact word is not immediately available.',
+        'Um comportamento que vale testar é começar uma resposta com uma estrutura simples e sustentá-la, mesmo quando a palavra exata não vem de imediato.',
     },
     workExamples: {
-      meetings: 'You may know what you want to contribute but enter the discussion later than intended.',
-      interviews: 'Prepared answers may feel stable while unexpected follow-up questions create more processing time.',
-      clients: 'You may simplify ideas that you could explain with more nuance in your native language.',
-      presentations: 'The prepared part may run well, while questions at the end take longer to answer.',
-      technical: 'You may know the technical content well, but pause while searching for the precise term.',
-      leadership: 'When asked for a quick view, you may give a shorter answer than your thinking supports.',
-      networking: 'Conversations may stay at a general level because moving to specifics takes extra effort.',
-      negotiation: 'You may notice the right moment to respond but reach it after the conversation has moved on.',
+      meetings: 'Pode acontecer de você saber o que quer contribuir, mas entrar na discussão depois do momento que pretendia.',
+      interviews: 'Respostas preparadas podem parecer estáveis, enquanto perguntas de acompanhamento inesperadas pedem mais tempo de organização.',
+      clients: 'Vale observar se você simplifica ideias que gostaria de explicar com mais nuance.',
+      presentations: 'A parte preparada pode fluir bem, enquanto as perguntas no final pedem mais tempo para responder.',
+      technical: 'Pode haver pausas enquanto você procura o termo técnico preciso.',
+      leadership: 'Quando pedem uma opinião rápida, sua resposta pode sair mais curta do que você gostaria.',
+      networking: 'A conversa pode ficar em um nível mais geral quando aprofundar exige resposta rápida.',
+      negotiation: 'Vale observar se você identifica o momento de responder, mas chega a ele quando a conversa já avançou.',
     },
   },
   interaction: {
     patternName: 'Prepared-stable, Interaction-sensitive',
+    patternLabel: 'Mais estável no que é preparado, sensível à interação',
     observation:
-      'Your answers suggest that communication is more stable when you control the direction, and less stable when the other person changes it. Based on what you reported, follow-ups, interruptions and misunderstandings appear to have the largest effect.',
+      'Entre os comportamentos explorados neste Map, suas respostas apontaram com mais frequência para momentos em que a outra pessoa muda o rumo da conversa. Você relatou mais quebras diante de perguntas de acompanhamento, interrupções ou trechos que não ficaram totalmente claros.',
     hypothesis:
-      'Your answers suggest that the constraint may be less about what you can say and more about sustaining an exchange — responding, clarifying and returning to your point when the conversation shifts.',
+      'Uma hipótese de trabalho é que o ponto mais relevante para observar seja a sustentação da troca: responder, esclarecer e retomar sua linha de raciocínio quando a conversa muda de direção.',
     trainingPriority: {
-      title: 'Recovery + continuity in live exchange',
+      title: 'Recuperação + continuidade na troca ao vivo',
       detail:
-        'The behavior worth testing is how you respond to a follow-up or interruption and then return to your original line of reasoning.',
+        'Um comportamento que vale testar é responder a uma pergunta ou interrupção e, em seguida, voltar de forma explícita ao ponto que você estava desenvolvendo.',
     },
     workExamples: {
-      meetings: 'After an interruption, your original point may not return to the discussion.',
-      interviews: 'A follow-up question may pull the answer away from the example you prepared.',
-      clients: 'When a client asks for clarification, you may shorten the explanation rather than rebuild it.',
-      presentations: 'The presentation itself may be stable while the Q&A feels less structured.',
-      technical: 'Questions in the middle of an explanation may make it harder to finish the sequence.',
-      leadership: 'Quick questions from leadership may lead you to agree before your view is fully expressed.',
-      networking: 'Conversations may end sooner than you would like because continuing takes extra effort.',
-      negotiation: 'A counter-proposal may shift the conversation before you have restated your position.',
+      meetings: 'Depois de uma interrupção, pode acontecer de o seu ponto original não voltar à discussão.',
+      interviews: 'Uma pergunta de acompanhamento pode afastar a resposta do exemplo que você preparou.',
+      clients: 'Quando um cliente pede esclarecimento, vale observar se você encurta a explicação em vez de reconstruí-la.',
+      presentations: 'A apresentação pode ser estável, enquanto a parte de perguntas parece menos estruturada.',
+      technical: 'Perguntas no meio de uma explicação podem dificultar a conclusão da sequência.',
+      leadership: 'Perguntas rápidas da liderança podem levar você a concordar antes de expressar sua visão por completo.',
+      networking: 'Conversas podem terminar antes do que você gostaria quando continuar exige mais esforço.',
+      negotiation: 'Uma contraproposta pode mudar o rumo da conversa antes de você retomar sua posição.',
     },
   },
   clarity: {
     patternName: 'Idea-rich, Structure-limited',
+    patternLabel: 'Padrão sensível à estrutura da mensagem',
     observation:
-      'Your answers suggest that ideas are available, but the route from idea to message is not always direct. Based on what you reported, the main point may arrive late or become diluted by sentence construction.',
+      'Entre os comportamentos explorados neste Map, suas respostas apontaram com mais frequência para o caminho entre a ideia e a mensagem. Você relatou situações em que o ponto principal demora a aparecer, a explicação se alonga ou parte da ideia fica incompleta.',
     hypothesis:
-      'Your answers suggest that the constraint may be the organization of the message rather than the language itself. The pattern appears more strongly when an idea is complex or needs to be adapted for a specific listener.',
+      'Uma hipótese de trabalho é que a organização da mensagem seja um ponto relevante para observar. Esse padrão pode aparecer com mais força quando a ideia é complexa ou precisa ser adaptada para um interlocutor específico.',
     trainingPriority: {
-      title: 'Message structure + point-first responses',
+      title: 'Estrutura da mensagem + ponto principal primeiro',
       detail:
-        'The behavior worth testing is whether leading with the main point and using shorter sentences makes your explanations easier to follow.',
+        'Um comportamento que vale testar é se começar pelo ponto principal e usar frases mais curtas torna suas explicações mais fáceis de acompanhar.',
     },
     workExamples: {
-      meetings: 'Contributions may begin with background, so the main point arrives after attention has moved.',
-      interviews: 'Answers may contain the right content but take longer to reach the conclusion.',
-      clients: 'Explanations may be accurate but harder for the client to follow than you intend.',
-      presentations: 'Slides may be clear while spoken transitions between ideas feel less direct.',
-      technical: 'Detail may come before the overall picture, making it harder for others to follow the logic.',
-      leadership: 'Updates may be longer than leadership expects, with the key decision less visible.',
-      networking: 'Describing what you do may take several attempts before it feels precise.',
-      negotiation: 'Your position may be present in what you say but not stated clearly enough to anchor the discussion.',
+      meetings: 'Suas contribuições podem começar pelo contexto, e o ponto principal chegar quando a atenção já mudou.',
+      interviews: 'As respostas podem ter o conteúdo certo, mas levar mais tempo para chegar à conclusão.',
+      clients: 'Vale observar se explicações corretas ficam mais difíceis de acompanhar do que você pretende.',
+      presentations: 'Os slides podem estar claros, enquanto as transições faladas entre ideias ficam menos diretas.',
+      technical: 'Os detalhes podem vir antes da visão geral, o que pode dificultar o acompanhamento da lógica.',
+      leadership: 'Atualizações podem ficar mais longas do que a liderança espera, com a decisão principal menos visível.',
+      networking: 'Descrever o que você faz pode levar algumas tentativas até soar preciso.',
+      negotiation: 'Sua posição pode estar presente no que você diz, mas não aparecer com clareza suficiente para orientar a conversa.',
     },
   },
   independence: {
     patternName: 'Capable, Support-dependent',
+    patternLabel: 'Funcional com suporte, sensível à autonomia',
     observation:
-      'Your answers suggest that you communicate effectively when support is available — scripts, notes, translation or a colleague. Based on what you reported, the pattern appears when that support is not there.',
+      'Entre os comportamentos explorados neste Map, suas respostas apontaram com mais frequência para o papel do suporte, como roteiros, anotações, tradução ou a ajuda de outra pessoa. Você relatou que a comunicação tende a funcionar melhor quando esse suporte está disponível.',
     hypothesis:
-      'Your answers suggest that preparation may be carrying more of your communication than necessary. The pattern appears more strongly when you need to continue without a script or simplify a message on your own.',
+      'Uma hipótese de trabalho é que a preparação esteja sustentando uma parte grande da sua comunicação. Vale observar o que acontece quando você precisa continuar sem roteiro ou simplificar uma mensagem por conta própria.',
     trainingPriority: {
-      title: 'Reduced preparation + independent recovery',
+      title: 'Menos preparação + recuperação com autonomia',
       detail:
-        'The behavior worth testing is whether you can speak from a few key points and continue with a simpler version when the exact language is not available.',
+        'Um comportamento que vale testar é falar a partir de alguns pontos-chave e continuar com uma versão mais simples quando o inglês exato não estiver disponível.',
     },
     workExamples: {
-      meetings: 'You may contribute more easily to agenda items you prepared than to open discussion.',
-      interviews: 'Memorized answers may feel stable while unplanned questions feel less so.',
-      clients: 'You may prefer to follow up in writing rather than resolve a point during the call.',
-      presentations: 'Delivery may depend on staying close to the script.',
-      technical: 'You may rely on written documentation to explain what you could explain verbally.',
-      leadership: 'You may prefer to prepare before speaking to leadership, even for routine updates.',
-      networking: 'Unscripted conversations may feel harder to sustain than structured ones.',
-      negotiation: 'You may depend on a prepared position and find it harder to adjust in the moment.',
+      meetings: 'Pode ser mais fácil contribuir em itens da pauta que você preparou do que em discussões abertas.',
+      interviews: 'Respostas memorizadas podem parecer estáveis, enquanto perguntas não planejadas parecem menos.',
+      clients: 'Vale observar se você prefere retomar um ponto por escrito em vez de resolvê-lo durante a ligação.',
+      presentations: 'A apresentação pode depender de ficar próxima do roteiro.',
+      technical: 'Você pode recorrer à documentação escrita para explicar algo que também poderia explicar falando.',
+      leadership: 'Você pode preferir se preparar antes de falar com a liderança, mesmo em atualizações de rotina.',
+      networking: 'Conversas sem roteiro podem parecer mais difíceis de sustentar do que as estruturadas.',
+      negotiation: 'Você pode depender de uma posição preparada e sentir mais dificuldade para ajustá-la no momento.',
     },
   },
   transfer: {
     patternName: 'Practice-stable, Transfer-limited',
+    patternLabel: 'Mais estável na prática, transferência a observar',
     observation:
-      'Your answers suggest a gap between what you can do in study or rehearsal and what appears in real work situations. Based on what you reported, language you know may not yet be available where it matters most.',
+      'Entre os comportamentos explorados neste Map, suas respostas apontaram com mais frequência para a distância entre o que acontece em aula, treino ou ensaio e o que aparece em situações reais de trabalho.',
     hypothesis:
-      'Your answers suggest that the constraint may be the transfer from practice to real use. The pattern appears more strongly in spontaneous professional situations than in prepared ones.',
+      'Uma hipótese de trabalho é que a passagem da prática para o uso real seja um ponto relevante para observar. Esse padrão pode aparecer com mais força em situações espontâneas do que em situações preparadas.',
     trainingPriority: {
-      title: 'Contextualized practice + transfer to real situations',
+      title: 'Prática contextualizada + transferência para situações reais',
       detail:
-        'The behavior worth testing is whether practicing inside realistic professional scenarios helps trained language appear in real meetings, calls and interviews.',
+        'Um comportamento que vale testar é se praticar dentro de cenários profissionais realistas ajuda o que foi treinado a aparecer em reuniões, ligações e entrevistas reais.',
     },
     workExamples: {
-      meetings: 'Expressions you have studied may not appear when the discussion is live.',
-      interviews: 'Rehearsed answers may feel stable, while the conversation around them feels less so.',
-      clients: 'You may return to familiar phrases even when you know more precise ones.',
-      presentations: 'Practiced delivery may feel different from how you communicate once questions begin.',
-      technical: 'Terminology you use in writing may be harder to use in spoken explanations.',
-      leadership: 'Language that feels available in class may be harder to reach in higher-stakes conversations.',
-      networking: 'Small talk you have practiced may feel less natural in a real event.',
-      negotiation: 'Structures you have trained may not appear when the conversation is unpredictable.',
+      meetings: 'Formas de responder que você praticou podem não aparecer quando a discussão acontece ao vivo.',
+      interviews: 'Respostas ensaiadas podem parecer estáveis, enquanto a conversa em torno delas parece menos.',
+      clients: 'Vale observar se você volta a frases familiares mesmo depois de praticar alternativas.',
+      presentations: 'A apresentação ensaiada pode ser diferente de como você se comunica quando as perguntas começam.',
+      technical: 'Termos que você usa por escrito podem ser mais difíceis de usar em explicações faladas.',
+      leadership: 'O que parece disponível em aula pode ser mais difícil de acessar em conversas de maior impacto.',
+      networking: 'Conversas informais que você praticou podem parecer menos naturais em um evento real.',
+      negotiation: 'Estruturas que você treinou podem não aparecer quando a conversa fica imprevisível.',
     },
   },
 }
 
-/** Used when every dimension is reported as Strong. */
-export const BROADLY_STABLE_PROFILE: Omit<Profile, 'workExamples'> = {
+/**
+ * Used when every dimension is reported as Strong. Its copy and work examples
+ * describe refinement, not a weakness in the numerically lowest dimension.
+ */
+export const BROADLY_STABLE_PROFILE: Profile = {
   patternName: 'Broadly stable, Refinement-focused',
+  patternLabel: 'Amplamente estável, foco em refinamento',
   observation:
-    'Your answers suggest that your communication is reported as stable across most situations. Based on what you reported, no single dimension stands out as a clear constraint.',
+    'Dentro das situações apresentadas, suas respostas descreveram uma comunicação relativamente estável na maioria dos comportamentos explorados. Nenhuma dimensão se destacou como padrão prioritário para observar.',
   hypothesis:
-    'Your answers suggest that further development may be about refinement in specific high-stakes contexts rather than a consistent pattern across situations.',
+    'Uma hipótese de trabalho é que o próximo desenvolvimento esteja mais em refinamento para contextos específicos de alto impacto do que em um padrão consistente entre situações.',
   trainingPriority: {
-    title: 'Targeted refinement in high-stakes contexts',
+    title: 'Refinamento direcionado em contextos de alto impacto',
     detail:
-      'The behavior worth testing is whether performance remains as stable in your most demanding situation as it is in everyday use.',
+      'Um comportamento que vale testar é se a comunicação se mantém tão estável na sua situação mais exigente quanto no uso do dia a dia.',
+  },
+  workExamples: {
+    meetings: 'Vale observar se sua participação se mantém igualmente estável em discussões rápidas, com várias pessoas falando.',
+    interviews: 'Pode ser útil observar se perguntas inesperadas mantêm a mesma precisão das respostas que você preparou.',
+    clients: 'Em conversas com clientes, o refinamento pode estar em ajustar nuance e tom para situações de maior impacto.',
+    presentations: 'Vale observar se a parte de perguntas mantém a mesma estrutura da apresentação planejada.',
+    technical: 'Vale observar se explicações técnicas longas continuam fáceis de acompanhar para públicos menos técnicos.',
+    leadership: 'Pode ser útil observar se suas respostas continuam concisas quando o tempo com a liderança é curto.',
+    networking: 'Vale observar como a conversa se sustenta quando o assunto sai do seu campo profissional.',
+    negotiation: 'Em negociações, o refinamento pode estar em manter precisão quando a conversa fica imprevisível.',
   },
 }
 
+/**
+ * Bootcamp-fit copy. NOT participant-facing: fit is computed and stored for
+ * internal research only (see `bootcampFit` in the sheet). Participants see
+ * `RESULT_COPY.nextFocus` instead. Kept for reference.
+ */
 export const NEXT_STEP_COPY = {
   fit: {
-    headline: 'Ready to test this pattern in practice?',
-    body: 'The WorkSpeak Bootcamp turns an initial communication hypothesis into targeted practice, observation and evidence over 30 days.',
-    cta: 'Explore the WorkSpeak Bootcamp',
+    headline: 'Quer observar esse padrão em prática?',
+    body: 'O WorkSpeak Bootcamp transforma uma hipótese inicial de comunicação em prática direcionada, observação e evidências ao longo de 30 dias.',
+    cta: 'Conhecer o WorkSpeak Bootcamp',
   },
   notYet: {
-    headline: 'The Bootcamp may not be your best next step yet.',
+    headline: 'O Bootcamp talvez não seja seu melhor próximo passo agora.',
     // PLACEHOLDER recommendations — require WorkSpeak review.
     reasons: {
       'training-constrained':
-        'Based on what you reported, current conditions may make daily practice difficult. The Bootcamp depends on regular practice, so it may be more useful when you can protect 15–25 minutes on most days. In the meantime, you could observe one situation per week and note where the pattern appears.',
+        'Pelo que você relatou, as condições atuais podem dificultar uma prática diária. O Bootcamp depende de prática regular, então pode ser mais útil quando for possível reservar 15–25 minutos na maioria dos dias. Enquanto isso, você pode observar uma situação por semana e anotar onde o padrão aparece.',
       'broadly-stable':
-        'Based on what you reported, your communication appears broadly stable. A structured 30-day programme may add less than targeted preparation for a specific high-stakes situation, such as an interview or presentation.',
+        'Pelo que você relatou, sua comunicação parece relativamente estável nas situações exploradas. Um programa estruturado de 30 dias pode acrescentar menos do que uma preparação direcionada para uma situação específica de alto impacto, como uma entrevista ou apresentação.',
       foundation:
-        'Based on what you reported, the pattern appears across all five dimensions. WorkSpeak is designed for professionals who already have a solid base in English. It may be worth building a broader language foundation first, then returning to the Map.',
+        'Pelo que você relatou, o padrão aparece nas cinco dimensões. O WorkSpeak foi pensado para profissionais que já usam inglês com alguma regularidade no trabalho. Pode valer a pena fortalecer primeiro uma base mais ampla no idioma e depois voltar ao Map.',
       'low-use':
-        'Based on what you reported, English is not currently part of your regular professional routine. WorkSpeak works best when there are real situations in which to test practice. It may be more useful when English use becomes more frequent.',
+        'Pelo que você relatou, o inglês ainda não faz parte da sua rotina profissional regular. O WorkSpeak funciona melhor quando existem situações reais para testar a prática. Ele pode ser mais útil quando o uso do inglês se tornar mais frequente.',
     },
   },
 }

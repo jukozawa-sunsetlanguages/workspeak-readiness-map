@@ -5,7 +5,7 @@ import '../styles.css'
 
 const siteName = 'WorkSpeak™ Communication Readiness Map — Sunset Languages'
 const siteDescription =
-  'Map what happens to your English communication when you need to explain, respond, interact or think on the spot at work. A five-minute reflection by Sunset Languages.'
+  'Mapeie o que acontece com sua comunicação em inglês quando você precisa explicar, responder, interagir ou pensar na hora no trabalho. Uma leitura inicial de cerca de 5 minutos, pela Sunset Languages.'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -60,7 +60,7 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>

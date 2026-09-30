@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { DIMENSIONS, SECTION_META } from '../assessment/content'
+import { SECTION_META, dimensionName } from '../assessment/content'
 import type { StageId } from '../assessment/content'
 import type { Answer, Question } from '../assessment/types'
 import OptionList from './OptionList'
@@ -20,30 +20,32 @@ const QuestionScreen = forwardRef<HTMLHeadingElement, Props>(function QuestionSc
   headingRef,
 ) {
   const meta = SECTION_META[stage]
-  const dimension = question.dimension ? DIMENSIONS[question.dimension] : null
+  const dimension = question.dimension ? dimensionName(question.dimension) : null
 
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
         <p className="eyebrow text-offwhite/65">
           {meta.number} — {meta.title}
-          {dimension && <span className="text-offwhite"> · {dimension.label}</span>}
+          {dimension && <span className="text-offwhite"> · {dimension}</span>}
         </p>
         <p className="eyebrow text-offwhite/55">
           {position} / {total}
         </p>
       </div>
 
-      {position === 1 && (
-        <p className="mt-4 border-l border-offwhite/25 pl-4 text-sm leading-relaxed text-offwhite/70">
-          {meta.note}
-        </p>
+      {position === 1 && meta.note.length > 0 && (
+        <div className="mt-4 space-y-1.5 border-l border-offwhite/25 pl-4 text-sm leading-relaxed text-offwhite/70">
+          {meta.note.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
       )}
 
       <h1
         ref={headingRef}
         tabIndex={-1}
-        className="mt-8 text-[1.5rem] leading-[1.25] font-semibold text-offwhite outline-none sm:text-[1.9rem]"
+        className="mt-8 text-[1.4rem] leading-[1.3] font-semibold text-offwhite outline-none sm:text-[1.75rem]"
       >
         {question.prompt}
       </h1>
