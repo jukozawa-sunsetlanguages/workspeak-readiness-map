@@ -1,0 +1,61 @@
+@import "tailwindcss" source("../");
+
+/* Sunset Languages visual system — official values only. */
+@theme {
+  --color-navy: #0F1E2E;       /* Night Navy — institutional base */
+  --color-strategic: #1F3F3A;  /* Strategic Green — diagnosis, process, depth */
+  --color-amber: #C96F1A;      /* Burnt Amber — controlled accent only */
+  --color-offwhite: #F4F2ED;   /* Corporate Off White — readable surfaces */
+  --color-graphite: #2B2F36;   /* Technical Gray — secondary info, dividers */
+
+  --font-heading: "Sora", "Source Sans 3", "Source Sans Pro", system-ui, sans-serif;
+  --font-sans: "Inter", "Source Sans 3", "Source Sans Pro", system-ui, sans-serif;
+}
+
+html {
+  background: var(--color-navy);
+}
+
+body {
+  @apply m-0 bg-navy text-offwhite font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--color-amber);
+  color: var(--color-navy);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 3px;
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+/* Subtle orientation transition between screens. */
+@keyframes step-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.step-in {
+  animation: step-in 220ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-in { animation: none; }
+  * { transition: none !important; }
+}
