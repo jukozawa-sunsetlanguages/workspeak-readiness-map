@@ -1,4 +1,4 @@
-import { DIMENSIONS, DIMENSION_STATES } from '../../assessment/content'
+import { DIMENSIONS, DIMENSION_STATES, dimensionName } from '../../assessment/content'
 import type { DimensionId, DimensionReading } from '../../assessment/types'
 import { cx } from '../cx'
 
@@ -19,7 +19,7 @@ export default function DimensionMap({ dimensions, primary, secondary }: Props) 
   return (
     <div>
       {/* Scale header (desktop) */}
-      <div className="hidden grid-cols-[minmax(0,15rem)_1fr] gap-10 pb-4 md:grid" aria-hidden="true">
+      <div className="hidden grid-cols-[minmax(0,17rem)_1fr] gap-10 pb-4 md:grid" aria-hidden="true">
         <span />
         <div className="relative h-4">
           {DIMENSION_STATES.map((s, i) => (
@@ -53,14 +53,14 @@ export default function DimensionMap({ dimensions, primary, secondary }: Props) 
           return (
             <li
               key={d.id}
-              className="grid grid-cols-1 gap-4 border-b border-offwhite/15 py-6 md:grid-cols-[minmax(0,15rem)_1fr] md:items-center md:gap-10"
+              className="grid grid-cols-1 gap-4 border-b border-offwhite/15 py-6 md:grid-cols-[minmax(0,17rem)_1fr] md:items-center md:gap-10"
             >
               <div>
                 <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-heading text-base font-semibold">
-                  {meta.label}
+                  {dimensionName(d.id)}
                   {(isPrimary || isSecondary) && (
                     <span className={cx('eyebrow text-[10px]!', isPrimary ? 'text-offwhite' : 'text-offwhite/70')}>
-                      {isPrimary ? '· Primary to observe' : '· Secondary'}
+                      {isPrimary ? '· Prioritário para observar' : '· Secundário'}
                     </span>
                   )}
                 </p>
@@ -90,7 +90,7 @@ export default function DimensionMap({ dimensions, primary, secondary }: Props) 
                   />
                 </div>
                 <p className="mt-3 text-sm font-medium text-offwhite">
-                  <span className="sr-only">{meta.label}: </span>
+                  <span className="sr-only">{dimensionName(d.id)}: </span>
                   {stateLabel}
                 </p>
               </div>

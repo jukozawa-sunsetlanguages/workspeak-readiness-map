@@ -1,13 +1,14 @@
 /**
  * ============================================================================
- *  ASSESSMENT ITEMS — CENTRALIZED CONFIGURATION
+ *  ASSESSMENT ITEMS — CENTRALIZED CONFIGURATION (participant copy in PT-BR)
  * ============================================================================
  *
- *  DRAFT — REQUIRES WORKSPEAK REVIEW BEFORE COMMERCIAL USE
+ *  Communication Readiness items (section 03) are the reviewed WorkSpeak V1
+ *  items. Training Readiness items (section 05) are still flagged `draft: true`.
  *
- *  Every item flagged `draft: true` was written for this MVP from the
- *  WorkSpeak behavioral definitions. None of them are validated. Weights are
- *  placeholders chosen to make the journey testable, not psychometric values.
+ *  These weights rank self-reported response patterns for MVP interpretation.
+ *  They do not represent interval measurement, validated severity,
+ *  proficiency or psychometric scoring.
  *
  *  To replace items: edit the arrays below. Components render whatever is
  *  here; interpretation rules only depend on `dimension` and `weight`.
@@ -40,49 +41,53 @@ export const CONTEXT_QUESTIONS: Question[] = [
     section: 'context',
     kind: 'multi',
     maxSelections: 3,
-    prompt: 'Where does English matter most in your professional life right now?',
-    helper: 'Select up to 3.',
+    prompt: 'Onde o inglês mais importa na sua vida profissional hoje?',
+    helper: 'Selecione até 3.',
     options: contextOptions([...ALL_CONTEXTS, 'other']),
   },
   {
     id: 'ctx_frequency',
     section: 'context',
     kind: 'single',
-    prompt: 'How often do you currently use English professionally?',
+    prompt: 'Com que frequência você usa inglês no trabalho hoje?',
     options: [
-      { id: 'rarely', label: 'Rarely or never' },
-      { id: 'monthly', label: 'A few times per month' },
-      { id: 'weekly', label: 'A few times per week' },
-      { id: 'almost_daily', label: 'Almost every day' },
-      { id: 'daily', label: 'Every day' },
+      { id: 'rarely', label: 'Raramente ou nunca' },
+      { id: 'monthly', label: 'Algumas vezes por mês' },
+      { id: 'weekly', label: 'Algumas vezes por semana' },
+      { id: 'almost_daily', label: 'Quase todos os dias' },
+      { id: 'daily', label: 'Todos os dias' },
     ],
   },
   {
     id: 'ctx_most_demanding',
     section: 'context',
     kind: 'single',
-    prompt: 'Which situation currently demands the most from you?',
+    prompt: 'Qual situação mais exige de você hoje?',
     options: contextOptions(ALL_CONTEXTS),
   },
   {
     id: 'ctx_unprepared',
     section: 'context',
     kind: 'single',
-    prompt: 'How often do you need to respond without having time to prepare?',
+    prompt: 'Com que frequência você precisa responder sem ter tempo de se preparar?',
     options: [
-      { id: 'rarely', label: 'Rarely — most situations can be prepared' },
-      { id: 'sometimes', label: 'Sometimes — a few times per month' },
-      { id: 'often', label: 'Often — most weeks' },
-      { id: 'constantly', label: 'Constantly — it is part of most conversations' },
+      { id: 'rarely', label: 'Raramente — a maioria das situações pode ser preparada' },
+      { id: 'sometimes', label: 'Às vezes — algumas vezes por mês' },
+      { id: 'often', label: 'Com frequência — na maioria das semanas' },
+      { id: 'constantly', label: 'Constantemente — faz parte da maioria das conversas' },
     ],
   },
 ]
 
 /* -------------------------------------------------------------------------- */
-/*  03 — COMMUNICATION READINESS (ASSESSMENT PATTERN)                          */
-/*  DRAFT — REQUIRES WORKSPEAK REVIEW BEFORE COMMERCIAL USE                    */
-/*  Weight: 3 = most stable reported behavior … 0 = strongest breakdown.       */
-/*  Option order is intentionally mixed so answers do not read good → bad.     */
+/*  03 — COMMUNICATION READINESS (ASSESSMENT PATTERN) — reviewed V1 items      */
+/*  Weight (internal only): 3 = more functional / stable reported behavior,    */
+/*  2 = functional with some friction, 1 = relevant reported breakdown,        */
+/*  0 = strong reported breakdown.                                             */
+/*  These weights rank self-reported response patterns for MVP                 */
+/*  interpretation. They do not represent interval measurement, validated      */
+/*  severity, proficiency or psychometric scoring.                             */
+/*  Option order is intentional and must NOT be sorted by weight.              */
 /* -------------------------------------------------------------------------- */
 
 export const READINESS_QUESTIONS: Question[] = [
@@ -91,29 +96,28 @@ export const READINESS_QUESTIONS: Question[] = [
     id: 'clr_complex_idea',
     section: 'readiness',
     dimension: 'clarity',
-    draft: true,
     kind: 'single',
-    prompt: 'When you explain a complex idea in English at work, what usually happens?',
+    prompt:
+      'Quando você precisa explicar uma ideia complexa em inglês no trabalho, o que costuma acontecer?',
     options: [
-      { id: 'a', weight: 2, label: 'The idea gets across, but I often need a second attempt to make it clear.' },
-      { id: 'b', weight: 1, label: 'I start with background, and the main point arrives late or gets diluted.' },
-      { id: 'c', weight: 3, label: 'I usually lead with the main point and add detail as the other person needs it.' },
-      { id: 'd', weight: 0, label: 'I build long sentences, lose track of where they were going and leave the idea unfinished.' },
+      { id: 'a', weight: 2, label: 'Consigo transmitir a ideia, mas às vezes preciso reorganizar parte da explicação para deixá-la clara.' },
+      { id: 'b', weight: 1, label: 'Costumo começar pelos detalhes ou contexto, e o ponto principal demora a aparecer.' },
+      { id: 'c', weight: 3, label: 'Geralmente apresento o ponto principal primeiro e acrescento detalhes conforme necessário.' },
+      { id: 'd', weight: 0, label: 'Costumo construir frases longas, perder o fio da explicação e deixar parte da ideia incompleta.' },
     ],
   },
   {
     id: 'clr_adapt_listener',
     section: 'readiness',
     dimension: 'clarity',
-    draft: true,
     kind: 'single',
     prompt:
-      'When you need to explain the same topic to a different listener — for example, a manager instead of a close colleague — what usually happens?',
+      'Quando você precisa explicar o mesmo assunto para interlocutores diferentes — por exemplo, um colega próximo e uma liderança — o que costuma acontecer?',
     options: [
-      { id: 'a', weight: 1, label: 'I keep the same explanation, because adjusting it in English takes too much processing.' },
-      { id: 'b', weight: 3, label: 'I adjust the level of detail and vocabulary without much difficulty.' },
-      { id: 'c', weight: 0, label: 'I simplify so much that important nuance disappears.' },
-      { id: 'd', weight: 2, label: 'I adjust it, but the message becomes longer than it needs to be.' },
+      { id: 'a', weight: 1, label: 'Costumo manter praticamente a mesma explicação, mesmo quando o interlocutor precisaria de outro nível de detalhe.' },
+      { id: 'b', weight: 3, label: 'Consigo ajustar o nível de detalhe, os exemplos e a linguagem de acordo com o interlocutor.' },
+      { id: 'c', weight: 0, label: 'Tento simplificar, mas às vezes retiro informações importantes para a compreensão.' },
+      { id: 'd', weight: 2, label: 'Consigo adaptar a explicação, mas ela costuma ficar mais longa do que o necessário.' },
     ],
   },
 
@@ -122,42 +126,41 @@ export const READINESS_QUESTIONS: Question[] = [
     id: 'int_follow_up',
     section: 'readiness',
     dimension: 'interaction',
-    draft: true,
     kind: 'single',
-    prompt: 'During an unexpected follow-up question in English, what usually happens?',
+    prompt:
+      'Quando alguém faz uma pergunta de acompanhamento que muda ou aprofunda o rumo da conversa, o que costuma acontecer?',
     options: [
-      { id: 'a', weight: 3, label: 'I can usually respond and develop the idea without extensive preparation.' },
-      { id: 'b', weight: 2, label: 'I can respond, but I need extra time to organize what I want to say.' },
-      { id: 'c', weight: 1, label: 'I often simplify or shorten the idea because I cannot access the language quickly enough.' },
-      { id: 'd', weight: 0, label: 'I frequently lose the response or depend on someone or something else to continue.' },
+      { id: 'a', weight: 3, label: 'Consigo responder à nova pergunta e conectá-la ao que já estava discutindo.' },
+      { id: 'b', weight: 2, label: 'Consigo responder, mas minha resposta tende a ficar mais curta ou menos desenvolvida do que eu gostaria.' },
+      { id: 'c', weight: 1, label: 'Respondo à pergunta, mas tenho dificuldade para retomar ou conectar minha resposta ao restante da conversa.' },
+      { id: 'd', weight: 0, label: 'A mudança de direção costuma quebrar minha participação e tenho dificuldade para continuar a troca.' },
     ],
   },
   {
     id: 'int_interrupted',
     section: 'readiness',
     dimension: 'interaction',
-    draft: true,
     kind: 'single',
-    prompt: 'When someone interrupts you in the middle of an explanation, what usually happens?',
+    prompt: 'Quando alguém interrompe você no meio de uma explicação, o que costuma acontecer?',
     options: [
-      { id: 'a', weight: 2, label: 'I respond to the interruption, but I often do not return to my original point.' },
-      { id: 'b', weight: 0, label: 'I usually let the other person take over and do not come back to it.' },
-      { id: 'c', weight: 3, label: 'I respond to the interruption and then return to where I was.' },
-      { id: 'd', weight: 1, label: 'I lose the thread and need to restart the explanation from the beginning.' },
+      { id: 'a', weight: 2, label: 'Respondo à interrupção, mas frequentemente não volto ao ponto original.' },
+      { id: 'b', weight: 0, label: 'Costumo deixar a outra pessoa assumir a conversa e não retomo minha ideia.' },
+      { id: 'c', weight: 3, label: 'Respondo à interrupção e depois retomo o ponto em que estava.' },
+      { id: 'd', weight: 1, label: 'Perco o fio e preciso reconstruir a explicação desde o início.' },
     ],
   },
   {
     id: 'int_clarify',
     section: 'readiness',
     dimension: 'interaction',
-    draft: true,
     kind: 'single',
-    prompt: 'When you do not fully understand what someone has just said, what do you usually do?',
+    prompt:
+      'Quando você não entende completamente o que alguém acabou de dizer em inglês, o que costuma fazer?',
     options: [
-      { id: 'a', weight: 1, label: 'I respond to what I think they meant and hope it fits.' },
-      { id: 'b', weight: 3, label: 'I ask a specific clarification question and continue from there.' },
-      { id: 'c', weight: 0, label: 'I agree or stay quiet, and check later by message or with a colleague.' },
-      { id: 'd', weight: 2, label: 'I ask them to repeat, and sometimes still respond to a partial understanding.' },
+      { id: 'a', weight: 1, label: 'Respondo com base no que acho que a pessoa quis dizer e vejo se a conversa continua fazendo sentido.' },
+      { id: 'b', weight: 3, label: 'Faço uma pergunta específica para esclarecer o que não entendi e continuo a conversa a partir disso.' },
+      { id: 'c', weight: 0, label: 'Costumo concordar ou ficar em silêncio e tento esclarecer depois, por mensagem ou com outra pessoa.' },
+      { id: 'd', weight: 2, label: 'Peço para a pessoa repetir, mas às vezes continuo sem confirmar exatamente a parte que não entendi.' },
     ],
   },
 
@@ -167,43 +170,41 @@ export const READINESS_QUESTIONS: Question[] = [
     id: 'acc_word_missing',
     section: 'readiness',
     dimension: 'access',
-    draft: true,
     kind: 'single',
     prompt:
-      'In a live conversation, you need a specific word and it does not come. What usually happens?',
+      'Durante uma conversa ao vivo, você precisa de uma palavra específica em inglês e ela não vem. O que costuma acontecer?',
     options: [
-      { id: 'a', weight: 1, label: 'I stop and search for the exact word, and the sentence loses momentum.' },
-      { id: 'b', weight: 3, label: 'I describe it another way and keep going.' },
-      { id: 'c', weight: 2, label: 'I pause briefly, find an alternative and continue.' },
-      { id: 'd', weight: 0, label: 'I abandon the sentence and move to something simpler to say.' },
+      { id: 'a', weight: 1, label: 'Paro tentando encontrar a palavra exata e a fala perde continuidade.' },
+      { id: 'b', weight: 3, label: 'Descrevo a ideia de outra forma e continuo falando.' },
+      { id: 'c', weight: 2, label: 'Faço uma breve pausa, encontro uma alternativa e continuo.' },
+      { id: 'd', weight: 0, label: 'Abandono aquela ideia e passo para algo mais simples de dizer.' },
     ],
   },
   {
     id: 'acc_opinion_no_notice',
     section: 'readiness',
     dimension: 'access',
-    draft: true,
     kind: 'single',
-    prompt: 'You are asked for your opinion in a meeting without notice. What usually happens?',
+    prompt:
+      'Em uma reunião em inglês, pedem sua opinião sem que você tenha se preparado para responder. O que costuma acontecer?',
     options: [
-      { id: 'a', weight: 2, label: 'There is a noticeable delay before I start, but then I continue.' },
-      { id: 'b', weight: 1, label: 'I know my view, but by the time it is organized in English the conversation has moved on.' },
-      { id: 'c', weight: 0, label: 'I say something brief or agree with someone else to avoid a long silence.' },
-      { id: 'd', weight: 3, label: 'I give a first answer and develop it as I speak.' },
+      { id: 'a', weight: 2, label: 'Demoro um pouco para começar, mas depois consigo desenvolver a resposta.' },
+      { id: 'b', weight: 1, label: 'Sei o que quero dizer, mas quando consigo organizar a resposta em inglês a conversa já avançou.' },
+      { id: 'c', weight: 0, label: 'Dou uma resposta muito curta ou concordo com alguém para evitar ficar muito tempo em silêncio.' },
+      { id: 'd', weight: 3, label: 'Dou uma primeira resposta e desenvolvo o raciocínio enquanto falo.' },
     ],
   },
   {
     id: 'acc_self_correction',
     section: 'readiness',
     dimension: 'access',
-    draft: true,
     kind: 'single',
-    prompt: 'While speaking under time pressure, how often do you correct yourself mid-sentence?',
+    prompt: 'Quando percebe um erro enquanto fala inglês sob pressão, o que costuma acontecer?',
     options: [
-      { id: 'a', weight: 3, label: 'Rarely — I let small mistakes go when the meaning is clear.' },
-      { id: 'b', weight: 2, label: 'Sometimes — mainly when a mistake could change the meaning.' },
-      { id: 'c', weight: 1, label: 'Often — I restart sentences to fix grammar or word choice.' },
-      { id: 'd', weight: 0, label: 'Very often — correcting takes more attention than the idea itself.' },
+      { id: 'a', weight: 3, label: 'Se a mensagem continua clara, normalmente sigo falando sem interromper o raciocínio.' },
+      { id: 'b', weight: 2, label: 'Corrijo quando considero necessário e geralmente consigo continuar de onde estava.' },
+      { id: 'c', weight: 1, label: 'Costumo voltar e reconstruir parte da frase, o que às vezes quebra o ritmo da resposta.' },
+      { id: 'd', weight: 0, label: 'A correção frequentemente passa a ocupar minha atenção e eu perco parte do raciocínio que estava desenvolvendo.' },
     ],
   },
 
@@ -212,61 +213,58 @@ export const READINESS_QUESTIONS: Question[] = [
     id: 'ind_preparation',
     section: 'readiness',
     dimension: 'independence',
-    draft: true,
     kind: 'single',
-    prompt: 'Before an important conversation in English, what do you usually do?',
+    prompt:
+      'Antes de uma conversa profissional importante em inglês, de quanto suporte você costuma precisar para conseguir se comunicar como pretende?',
     options: [
-      { id: 'a', weight: 1, label: 'I write out most of what I plan to say, often in full sentences.' },
-      { id: 'b', weight: 3, label: 'I note a few key points and speak from them.' },
-      { id: 'c', weight: 0, label: 'I write it in my native language first and translate it.' },
-      { id: 'd', weight: 2, label: 'I prepare the main ideas and a few key phrases in advance.' },
+      { id: 'a', weight: 1, label: 'Preciso preparar grande parte do que vou dizer em frases completas para conseguir conduzir a conversa.' },
+      { id: 'b', weight: 3, label: 'Alguns pontos-chave costumam ser suficientes; consigo desenvolver o restante durante a conversa.' },
+      { id: 'c', weight: 0, label: 'Costumo formular primeiro em português e depois traduzir o que pretendo dizer.' },
+      { id: 'd', weight: 2, label: 'Preparo as ideias principais e algumas expressões específicas, mas consigo adaptar o restante durante a conversa.' },
     ],
   },
   {
     id: 'ind_language_unavailable',
     section: 'readiness',
     dimension: 'independence',
-    draft: true,
     kind: 'single',
     prompt:
-      'During a conversation, the language you need is not available. What usually happens next?',
+      'Durante uma conversa, você não consegue acessar exatamente o inglês de que precisa. O que costuma fazer?',
     options: [
-      { id: 'a', weight: 2, label: 'I continue with a simpler version and follow up in writing to add precision.' },
-      { id: 'b', weight: 0, label: 'A colleague often steps in or finishes the explanation for me.' },
-      { id: 'c', weight: 1, label: 'I pause to check a translation tool or my notes before continuing.' },
-      { id: 'd', weight: 3, label: 'I simplify the message and continue, even if it is not perfectly expressed.' },
+      { id: 'a', weight: 2, label: 'Continuo com uma versão mais simples e, se necessário, complemento alguma precisão depois por escrito.' },
+      { id: 'b', weight: 0, label: 'Frequentemente outra pessoa precisa assumir ou completar a explicação por mim.' },
+      { id: 'c', weight: 1, label: 'Preciso consultar tradução ou minhas anotações antes de conseguir continuar.' },
+      { id: 'd', weight: 3, label: 'Reformulo a mensagem com os recursos que tenho e continuo a conversa.' },
     ],
   },
 
   // ---- TRANSFER ------------------------------------------------------------
   {
-    id: 'trf_studied_expression',
+    id: 'trf_practice_to_work',
     section: 'readiness',
     dimension: 'transfer',
-    draft: true,
     kind: 'single',
     prompt:
-      'You have studied or practiced a useful expression. What usually happens when you need it at work?',
+      'Quando você pratica uma nova forma de responder, explicar ou organizar uma ideia em inglês, o que costuma acontecer depois em uma situação real de trabalho?',
     options: [
-      { id: 'a', weight: 2, label: 'I use it in writing first; in speech it takes longer to appear.' },
-      { id: 'b', weight: 0, label: 'I tend to fall back on the same familiar phrases I have always used.' },
-      { id: 'c', weight: 3, label: 'I can usually use it in a real conversation within a short time.' },
-      { id: 'd', weight: 1, label: 'I recognize it when others use it, but it rarely comes out when I speak.' },
+      { id: 'a', weight: 2, label: 'Consigo usar parte do que pratiquei, mas normalmente primeiro em situações mais controladas ou por escrito.' },
+      { id: 'b', weight: 0, label: 'Na situação real, costumo voltar automaticamente ao mesmo padrão de comunicação que já usava antes.' },
+      { id: 'c', weight: 3, label: 'Geralmente consigo experimentar o que pratiquei em uma situação real pouco tempo depois.' },
+      { id: 'd', weight: 1, label: 'Durante o treino sei o que deveria fazer, mas na situação real raramente consigo acessar esse novo comportamento.' },
     ],
   },
   {
     id: 'trf_prepared_vs_spontaneous',
     section: 'readiness',
     dimension: 'transfer',
-    draft: true,
     kind: 'single',
     prompt:
-      'Compare prepared situations (classes, rehearsals, planned presentations) with spontaneous work situations. What usually happens?',
+      'Comparando situações preparadas — como aulas, ensaios ou apresentações planejadas — com situações espontâneas de trabalho, o que costuma acontecer?',
     options: [
-      { id: 'a', weight: 1, label: 'I perform well when prepared, but lose stability when things go off-plan.' },
-      { id: 'b', weight: 3, label: 'My communication is broadly similar in both.' },
-      { id: 'c', weight: 2, label: 'Spontaneous situations are a little less precise, but still stable.' },
-      { id: 'd', weight: 0, label: 'What I can do in class or rehearsal rarely appears in real work situations.' },
+      { id: 'a', weight: 1, label: 'Quando estou preparado(a), minha comunicação funciona bem, mas perde bastante estabilidade quando algo sai do planejado.' },
+      { id: 'b', weight: 3, label: 'Minha comunicação tende a permanecer relativamente estável nos dois tipos de situação.' },
+      { id: 'c', weight: 2, label: 'Em situações espontâneas perco um pouco de precisão, mas consigo sustentar a comunicação.' },
+      { id: 'd', weight: 0, label: 'Boa parte do que consigo fazer em aula, treino ou ensaio não aparece quando preciso usar inglês espontaneamente no trabalho.' },
     ],
   },
 ]
@@ -281,19 +279,19 @@ export const FRICTION_QUESTIONS: Question[] = [
     section: 'friction',
     kind: 'multi',
     maxSelections: 2,
-    prompt: 'What most often gets in the way when you need to communicate in English at work?',
-    helper: 'Select up to 2.',
+    prompt: 'O que mais costuma atrapalhar quando você precisa se comunicar em inglês no trabalho?',
+    helper: 'Escolha até 2.',
     options: [
-      { id: 'finding_words', label: 'Finding words quickly enough' },
-      { id: 'organizing_thoughts', label: 'Organizing my thoughts' },
-      { id: 'understanding', label: 'Understanding the other person' },
-      { id: 'fear_mistakes', label: 'Fear of making mistakes' },
-      { id: 'structuring', label: 'Structuring my message' },
-      { id: 'keeping_going', label: 'Keeping my answer going' },
-      { id: 'recovering', label: 'Recovering when something goes wrong' },
-      { id: 'lack_practice', label: 'Lack of real practice' },
-      { id: 'vocabulary', label: 'Vocabulary' },
-      { id: 'other', label: 'Other', opensText: true },
+      { id: 'finding_words', label: 'Encontrar as palavras com rapidez' },
+      { id: 'organizing_thoughts', label: 'Organizar meu raciocínio' },
+      { id: 'understanding', label: 'Entender a outra pessoa' },
+      { id: 'fear_mistakes', label: 'Medo de errar' },
+      { id: 'structuring', label: 'Estruturar minha mensagem' },
+      { id: 'keeping_going', label: 'Sustentar minha resposta' },
+      { id: 'recovering', label: 'Me recuperar quando algo sai do planejado' },
+      { id: 'lack_practice', label: 'Falta de prática em situações reais' },
+      { id: 'vocabulary', label: 'Vocabulário' },
+      { id: 'other', label: 'Outro', opensText: true },
     ],
   },
   {
@@ -302,9 +300,9 @@ export const FRICTION_QUESTIONS: Question[] = [
     kind: 'text',
     optional: true,
     prompt:
-      'If you could improve one professional communication situation in the next 30 days, what would it be?',
-    helper: 'A short sentence is enough.',
-    placeholder: 'For example: giving updates in the weekly project meeting',
+      'Se pudesse melhorar uma situação de comunicação profissional nos próximos 30 dias, qual seria?',
+    helper: 'Uma frase curta é suficiente.',
+    placeholder: 'Por exemplo: dar atualizações na reunião semanal do projeto',
   },
 ]
 
@@ -321,11 +319,11 @@ export const TRAINING_QUESTIONS: Question[] = [
     draft: true,
     kind: 'single',
     prompt:
-      'In a typical week, how realistic is 15–25 minutes of focused practice on most days?',
+      'Em uma semana típica, o quanto é realista reservar 15–25 minutos de prática focada na maioria dos dias?',
     options: [
-      { id: 'a', weight: 2, label: 'Realistic — I can protect that time.' },
-      { id: 'b', weight: 1, label: 'Possible on some days, but not most.' },
-      { id: 'c', weight: 0, label: 'Difficult at the moment because of workload or other commitments.' },
+      { id: 'a', weight: 2, label: 'Realista — consigo reservar esse tempo.' },
+      { id: 'b', weight: 1, label: 'Possível em alguns dias, mas não na maioria.' },
+      { id: 'c', weight: 0, label: 'Difícil no momento, por causa da carga de trabalho ou de outros compromissos.' },
     ],
   },
   {
@@ -334,11 +332,11 @@ export const TRAINING_QUESTIONS: Question[] = [
     draft: true,
     kind: 'single',
     prompt:
-      'Some practice involves repeating the same communication task several times with small adjustments. What would you most likely do?',
+      'Parte da prática envolve repetir a mesma tarefa de comunicação várias vezes, com pequenos ajustes. O que você provavelmente faria?',
     options: [
-      { id: 'a', weight: 1, label: 'Do it, although repetition may feel slow.' },
-      { id: 'b', weight: 2, label: 'Repeat it and look for what changes between attempts.' },
-      { id: 'c', weight: 0, label: 'Move on after one or two attempts.' },
+      { id: 'a', weight: 1, label: 'Faria, embora a repetição possa parecer lenta.' },
+      { id: 'b', weight: 2, label: 'Repetiria e observaria o que muda de uma tentativa para outra.' },
+      { id: 'c', weight: 0, label: 'Seguiria em frente depois de uma ou duas tentativas.' },
     ],
   },
   {
@@ -346,11 +344,11 @@ export const TRAINING_QUESTIONS: Question[] = [
     section: 'training',
     draft: true,
     kind: 'single',
-    prompt: 'Some tasks require recording a short voice or video response. What is most likely?',
+    prompt: 'Algumas tarefas pedem que você grave uma resposta curta em áudio ou vídeo. O que é mais provável?',
     options: [
-      { id: 'a', weight: 2, label: 'I would record it and review it.' },
-      { id: 'b', weight: 1, label: 'I would record it, but might avoid listening back.' },
-      { id: 'c', weight: 0, label: 'Recording is not practical for me right now (privacy, environment or equipment).' },
+      { id: 'a', weight: 2, label: 'Eu gravaria e revisaria a gravação.' },
+      { id: 'b', weight: 1, label: 'Eu gravaria, mas talvez evitasse ouvir depois.' },
+      { id: 'c', weight: 0, label: 'Gravar não é viável para mim agora (privacidade, ambiente ou equipamento).' },
     ],
   },
   {
@@ -359,11 +357,11 @@ export const TRAINING_QUESTIONS: Question[] = [
     draft: true,
     kind: 'single',
     prompt:
-      'If a practice exposed a communication weakness, what would you be most likely to do?',
+      'Se uma prática deixasse evidente um ponto frágil da sua comunicação, o que você provavelmente faria?',
     options: [
-      { id: 'a', weight: 0, label: 'Focus on tasks where I already perform well.' },
-      { id: 'b', weight: 2, label: 'Treat it as information and try the task again with one adjustment.' },
-      { id: 'c', weight: 1, label: 'Take a break and return to it later.' },
+      { id: 'a', weight: 0, label: 'Me concentraria em tarefas em que já me saio bem.' },
+      { id: 'b', weight: 2, label: 'Trataria isso como informação e tentaria a tarefa de novo com um ajuste.' },
+      { id: 'c', weight: 1, label: 'Faria uma pausa e voltaria a ela depois.' },
     ],
   },
   {
@@ -371,12 +369,12 @@ export const TRAINING_QUESTIONS: Question[] = [
     section: 'training',
     draft: true,
     kind: 'single',
-    prompt: 'When you receive specific feedback on how you communicated, what usually happens?',
+    prompt: 'Quando você recebe um feedback específico sobre como se comunicou, o que costuma acontecer?',
     options: [
-      { id: 'a', weight: 2, label: 'I try to apply one concrete change the next time.' },
-      { id: 'b', weight: 1, label: 'I understand it, but applying it takes a few reminders.' },
-      { id: 'c', weight: 1, label: 'I find it hard to use unless it comes with a worked example.' },
-      { id: 'd', weight: 0, label: 'I rarely have the opportunity to apply it before the next situation.' },
+      { id: 'a', weight: 2, label: 'Tento aplicar uma mudança concreta na próxima vez.' },
+      { id: 'b', weight: 1, label: 'Entendo, mas preciso de alguns lembretes para conseguir aplicar.' },
+      { id: 'c', weight: 1, label: 'Tenho dificuldade de usar se não vier com um exemplo prático.' },
+      { id: 'd', weight: 0, label: 'Raramente tenho oportunidade de aplicar antes da próxima situação.' },
     ],
   },
 ]

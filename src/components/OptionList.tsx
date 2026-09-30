@@ -1,3 +1,4 @@
+import { UI } from '../assessment/content'
 import type { Answer, Question } from '../assessment/types'
 import { cx } from './cx'
 
@@ -34,7 +35,7 @@ export default function OptionList({ question, answer, onChange }: Props) {
       <legend className="sr-only">{question.prompt}</legend>
       {multi && max && (
         <p className="mb-3 text-sm text-offwhite/65" aria-live="polite">
-          {values.length} of {max} selected
+          {UI.selectedCount(values.length, max)}
         </p>
       )}
       <ul className="border-t border-offwhite/12">
@@ -88,7 +89,7 @@ export default function OptionList({ question, answer, onChange }: Props) {
       {otherSelected && (
         <div className="mt-5">
           <label htmlFor={`${question.id}-other`} className="mb-2 block text-sm text-offwhite/75">
-            Describe “Other” in a few words
+            {UI.describeOther}
           </label>
           <input
             id={`${question.id}-other`}

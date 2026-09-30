@@ -15,9 +15,9 @@ const FIELDS: {
   type: string
   autoComplete: string
 }[] = [
-  { key: 'firstName', label: 'First name', type: 'text', autoComplete: 'given-name' },
-  { key: 'email', label: 'Email', type: 'email', autoComplete: 'email' },
-  { key: 'role', label: 'Job role / professional area', type: 'text', autoComplete: 'organization-title' },
+  { key: 'firstName', label: CONTACT_COPY.fields.firstName, type: 'text', autoComplete: 'given-name' },
+  { key: 'email', label: CONTACT_COPY.fields.email, type: 'email', autoComplete: 'email' },
+  { key: 'role', label: CONTACT_COPY.fields.role, type: 'text', autoComplete: 'organization-title' },
 ]
 
 const ContactScreen = forwardRef<HTMLHeadingElement, Props>(function ContactScreen(
@@ -69,7 +69,8 @@ const ContactScreen = forwardRef<HTMLHeadingElement, Props>(function ContactScre
         })}
       </div>
 
-      <p className="mt-8 text-xs leading-relaxed text-offwhite/60">{CONTACT_COPY.privacy}</p>
+      <p className="mt-8 text-sm leading-relaxed text-offwhite/75">{CONTACT_COPY.usage}</p>
+      <p className="mt-3 text-xs leading-relaxed text-offwhite/60">{CONTACT_COPY.privacy}</p>
     </div>
   )
 })

@@ -1,6 +1,7 @@
 /**
- * Static copy and labels. Keep interface text here so it can be revised
- * without touching components or interpretation rules.
+ * Static copy and labels (participant-facing copy is PT-BR). Keep interface
+ * text here so it can be revised without touching components or
+ * interpretation rules.
  */
 import type {
   ContextKey,
@@ -13,95 +14,146 @@ export const BRAND = {
   parent: 'Sunset Languages',
   system: 'WorkSpeak™',
   product: 'Communication Readiness Map',
-  principle: 'Evidence before confidence.',
+  principle: 'Evidência antes da confiança.',
+  /** Official parent-brand logo (navy canvas trimmed; mark itself untouched). */
+  logo: { src: '/brand/sunset-languages-logo.png', width: 480, height: 168 },
 }
 
 /** Placeholder destination until the Bootcamp page exists. */
 export const BOOTCAMP_URL = '#bootcamp'
 
 export const INTRO = {
-  headline: 'How ready is your English for real professional pressure?',
+  headline: 'O quanto seu inglês está pronto para situações reais de pressão profissional?',
   support:
-    'Map what happens to your communication when you need to explain, respond, interact or think on the spot.',
-  clarification:
-    'This is not an English proficiency test. It helps you reflect on how your communication currently behaves in professional situations.',
-  facts: [
-    { value: '~5 minutes', label: 'Duration' },
-    { value: 'Immediate initial reading', label: 'Output' },
-    { value: 'Professional communication focus', label: 'Scope' },
+    'Mapeie o que acontece com sua comunicação quando você precisa explicar, responder, interagir ou pensar na hora.',
+  clarification: [
+    'Isto não é um teste de proficiência em inglês.',
+    'É uma leitura inicial de como sua comunicação tende a se comportar em situações profissionais.',
   ],
-  cta: 'Map my communication readiness',
+  facts: [
+    { value: '~5 minutos', label: 'Duração' },
+    { value: 'Leitura inicial imediata', label: 'Resultado' },
+    { value: 'Comunicação profissional', label: 'Foco' },
+  ],
+  cta: 'Mapear minha comunicação',
+}
+
+/** Interface actions and small system messages. */
+export const UI = {
+  continue: 'Continuar',
+  back: 'Voltar',
+  progressLabel: 'Progresso da avaliação',
+  stageOf: (current: number, total: number, label: string) =>
+    `Etapa ${current} de ${total}: ${label}`,
+  selectedCount: (count: number, max: number) => `${count} de ${max} selecionadas`,
+  describeOther: 'Descreva “Outro” em poucas palavras',
+  restartConfirm: 'Recomeçar? Suas respostas atuais serão apagadas.',
+}
+
+export const VALIDATION = {
+  textRequired: 'Escreva uma resposta curta para continuar.',
+  multiRequired: 'Selecione pelo menos uma opção para continuar.',
+  singleRequired: 'Selecione a opção mais próxima da sua experiência para continuar.',
+  tooMany: (max: number) => `Selecione até ${max} opções.`,
+  otherText: 'Descreva “Outro” em poucas palavras ou desmarque essa opção.',
+  firstName: 'Informe seu nome.',
+  email: 'Informe seu e-mail.',
+  emailFormat: 'Este e-mail parece incompleto. Confira, por favor.',
+  role: 'Informe seu cargo ou área profissional.',
 }
 
 /** Progress stages shown in the progress rail. */
 export const STAGES = [
-  { id: 'context', label: 'Context' },
-  { id: 'readiness', label: 'Readiness' },
-  { id: 'friction', label: 'Friction' },
-  { id: 'training', label: 'Training' },
-  { id: 'result', label: 'Result' },
+  { id: 'context', label: 'Contexto' },
+  { id: 'readiness', label: 'Comunicação' },
+  { id: 'friction', label: 'Fricção' },
+  { id: 'training', label: 'Treino' },
+  { id: 'result', label: 'Resultado' },
 ] as const
 
 export type StageId = (typeof STAGES)[number]['id']
 
 export const SECTION_META: Record<
   StageId,
-  { number: string; title: string; note: string }
+  { number: string; title: string; note: string[] }
 > = {
   context: {
     number: '02',
-    title: 'Professional context',
-    note: 'Where English needs to work. These answers give context — they are not scored.',
+    title: 'Contexto profissional',
+    note: [
+      'Onde o inglês precisa funcionar.',
+      'Estas respostas ajudam a contextualizar seu mapa — elas não entram no cálculo das dimensões.',
+    ],
   },
   readiness: {
     number: '03',
-    title: 'Communication readiness',
-    note: 'Choose the option closest to what usually happens — not what you would like to happen.',
+    title: 'Communication Readiness',
+    note: [
+      'Escolha a opção que mais se aproxima do que costuma acontecer — não do que você gostaria que acontecesse.',
+    ],
   },
   friction: {
     number: '04',
-    title: 'Perceived friction',
-    note: 'What you think is limiting your communication. Kept separate from your response pattern.',
+    title: 'Fricção percebida',
+    note: [
+      'O que você percebe como obstáculo. Fica separado do padrão das suas respostas.',
+    ],
   },
   training: {
     number: '05',
-    title: 'Training readiness',
-    note: 'Whether deliberate practice is currently feasible for you. This is not a judgment of motivation.',
+    title: 'Prontidão para o treino',
+    note: [
+      'Agora não estamos avaliando sua comunicação.',
+      'Queremos entender se este é um momento viável para praticar de forma deliberada e consistente.',
+    ],
   },
   result: {
     number: '06',
-    title: 'Result access',
-    note: 'Your answers are used to generate your initial Communication Readiness Map.',
+    title: 'Acesso ao resultado',
+    note: [],
   },
 }
 
+/**
+ * Dimension names stay in English as methodological labels, paired with
+ * PT-BR for clarity.
+ */
 export const DIMENSIONS: Record<
   DimensionId,
-  { label: string; question: string }
+  { label: string; labelPt: string; question: string }
 > = {
   clarity: {
     label: 'Clarity',
-    question: 'Can you turn an idea into a message another person can follow?',
+    labelPt: 'Clareza',
+    question: 'Você consegue transformar uma ideia em uma mensagem que outra pessoa acompanha?',
   },
   interaction: {
     label: 'Interaction',
-    question: 'Can you respond, clarify, recover and sustain an exchange?',
+    labelPt: 'Interação',
+    question: 'Você consegue responder, esclarecer, se recuperar e sustentar uma troca?',
   },
   access: {
     label: 'Access Under Pressure',
+    labelPt: 'Acesso sob pressão',
     question:
-      'Can you access English you already know when time, uncertainty or interaction creates pressure?',
+      'Você consegue acessar o inglês que já conhece quando tempo, incerteza ou interação criam pressão?',
   },
   independence: {
     label: 'Independence',
-    question: 'How much support do you need before or during communication?',
+    labelPt: 'Independência',
+    question: 'De quanto suporte você precisa antes ou durante a comunicação?',
   },
   transfer: {
     label: 'Transfer',
+    labelPt: 'Transferência',
     question:
-      'Can knowledge and practice be used in the professional context where they matter?',
+      'O que você pratica aparece no contexto profissional em que realmente importa?',
   },
 }
+
+/** "Clarity — Clareza" */
+export const dimensionName = (id: DimensionId) =>
+  `${DIMENSIONS[id].label} — ${DIMENSIONS[id].labelPt}`
 
 export const DIMENSION_ORDER: DimensionId[] = [
   'clarity',
@@ -113,10 +165,10 @@ export const DIMENSION_ORDER: DimensionId[] = [
 
 /** Ordered from least to most stable — used by the dimension map scale. */
 export const DIMENSION_STATES: { id: DimensionState; label: string }[] = [
-  { id: 'priority', label: 'Priority to observe' },
-  { id: 'developing', label: 'Developing' },
-  { id: 'functional', label: 'Functional' },
-  { id: 'strong', label: 'Strong' },
+  { id: 'priority', label: 'A observar' },
+  { id: 'developing', label: 'Em desenvolvimento' },
+  { id: 'functional', label: 'Funcional' },
+  { id: 'strong', label: 'Mais estável' },
 ]
 
 export const TRAINING_READINESS_LABELS: Record<
@@ -124,36 +176,43 @@ export const TRAINING_READINESS_LABELS: Record<
   { label: string; text: string }
 > = {
   high: {
-    label: 'High',
-    text: 'Based on what you reported, current conditions appear to support regular deliberate practice, including repetition, recording and feedback.',
+    label: 'Alta',
+    text: 'Pelo que você relatou, suas condições atuais parecem favorecer prática deliberada regular, com repetição, gravação e feedback.',
   },
   moderate: {
-    label: 'Moderate',
-    text: 'Based on what you reported, deliberate practice looks feasible with some adjustment — for example, protecting time or getting used to recording and repetition.',
+    label: 'Moderada',
+    text: 'Pelo que você relatou, a prática deliberada parece viável com alguns ajustes — por exemplo, reservar tempo na rotina ou se acostumar com gravação e repetição.',
   },
   constrained: {
-    label: 'Currently constrained',
-    text: 'Based on what you reported, current conditions — time, environment or practical access — may make regular deliberate practice difficult right now. This describes circumstances, not commitment.',
+    label: 'Condições atuais limitadas',
+    text: 'Pelo que você relatou, as condições atuais — tempo, ambiente ou acesso prático — podem dificultar uma prática deliberada regular neste momento. Isso descreve circunstâncias, não comprometimento.',
   },
 }
 
 export const CONTEXT_LABELS: Record<ContextKey, string> = {
-  meetings: 'Meetings',
-  interviews: 'Job interviews',
-  presentations: 'Presentations',
-  clients: 'Client conversations',
-  technical: 'Technical explanations',
-  leadership: 'Conversations with leadership',
+  meetings: 'Reuniões',
+  interviews: 'Entrevistas de emprego',
+  presentations: 'Apresentações',
+  clients: 'Conversas com clientes',
+  technical: 'Explicações técnicas',
+  leadership: 'Conversas com liderança',
   networking: 'Networking',
-  negotiation: 'Negotiation',
-  other: 'Other',
+  negotiation: 'Negociação',
+  other: 'Outro',
 }
 
 export const CONTACT_COPY = {
-  headline: 'Your map is ready to generate.',
-  explanation: 'Your answers are used to generate your initial Communication Readiness Map.',
+  headline: 'Seu mapa está pronto.',
+  explanation:
+    'Antes de mostrar a leitura completa, precisamos de algumas informações para identificar seu resultado.',
+  fields: {
+    firstName: 'Nome',
+    email: 'E-mail',
+    role: 'Cargo ou área profissional',
+  },
+  usage: 'Suas respostas serão usadas para gerar seu Communication Readiness Map inicial.',
   // Accurate for the MVP, where nothing is submitted. Update when submission is added.
   privacy:
-    'In this test version, your details and answers stay in this browser session. There is no marketing opt-in on this screen.',
-  cta: 'View my map',
+    'Nesta versão de teste, seus dados e respostas ficam apenas nesta sessão do navegador. Esta tela não inclui consentimento para comunicações de marketing.',
+  cta: 'Ver meu mapa',
 }

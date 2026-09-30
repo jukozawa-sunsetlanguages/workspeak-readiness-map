@@ -106,7 +106,10 @@ export type NextStepState =
     }
 
 export interface MapResult {
+  /** Internal WorkSpeak profile name. */
   patternName: string
+  /** Participant-facing PT-BR label. */
+  patternLabel: string
   observation: string
   dimensions: DimensionReading[]
   strongest: DimensionId

@@ -1,15 +1,16 @@
 import { cx } from '../cx'
 
 const STEPS = [
-  { label: 'Self-report', text: 'What you described about your communication.', done: true },
-  { label: 'Hypothesis', text: 'The working pattern this Map suggests.', done: true },
-  { label: 'Performance evidence', text: 'What actually appears when you communicate.', done: false },
+  { label: 'Autorrelato', text: 'O que você descreveu sobre sua comunicação.', done: true },
+  { label: 'Hipótese', text: 'O padrão de trabalho que este Map sugere.', done: true },
+  { label: 'Performance', text: 'O que aparece quando você se comunica em tempo real.', done: false },
+  { label: 'Evidência', text: 'O que se confirma — ou não — a partir da observação.', done: false },
 ]
 
-/** SELF-REPORT → HYPOTHESIS → PERFORMANCE EVIDENCE, on the amber line. */
+/** AUTORRELATO → HIPÓTESE → PERFORMANCE → EVIDÊNCIA, on the amber line. */
 export default function EvidencePath() {
   return (
-    <ol className="relative grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
+    <ol className="relative grid grid-cols-1 gap-8 md:grid-cols-4 md:gap-6">
       {STEPS.map((s, i) => (
         <li key={s.label} className="relative pl-8 md:pl-0 md:pt-8">
           {/* connector: vertical on mobile, horizontal on desktop */}
@@ -29,7 +30,7 @@ export default function EvidencePath() {
           />
           <p className="eyebrow text-offwhite/65">
             {String(i + 1).padStart(2, '0')}
-            {s.done ? ' · Done' : ' · Next'}
+            {s.done ? ' · Feito' : ' · Próximo'}
           </p>
           <p className="mt-2 font-heading text-lg font-semibold">{s.label}</p>
           <p className="mt-1 text-sm leading-relaxed text-offwhite/75">{s.text}</p>

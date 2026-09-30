@@ -9,7 +9,7 @@ export default function IntroScreen({ onStart }: { onStart: () => void }) {
         {BRAND.product}
       </p>
 
-      <h1 className="mt-8 max-w-2xl text-[2.1rem] leading-[1.12] font-semibold text-offwhite sm:text-[3.1rem]">
+      <h1 className="mt-8 max-w-2xl text-[1.85rem] leading-[1.15] font-semibold text-balance text-offwhite sm:text-[2.9rem]">
         {INTRO.headline}
       </h1>
 
@@ -17,9 +17,11 @@ export default function IntroScreen({ onStart }: { onStart: () => void }) {
 
       <p className="mt-8 max-w-xl text-lg leading-relaxed text-offwhite/85">{INTRO.support}</p>
 
-      <p className="mt-6 max-w-xl border-l border-offwhite/25 pl-4 text-[15px] leading-relaxed text-offwhite/70">
-        {INTRO.clarification}
-      </p>
+      <div className="mt-6 max-w-xl space-y-2 border-l border-offwhite/25 pl-4 text-[15px] leading-relaxed text-offwhite/70">
+        {INTRO.clarification.map((line) => (
+          <p key={line}>{line}</p>
+        ))}
+      </div>
 
       <dl className="mt-12 grid max-w-2xl grid-cols-1 border-t border-offwhite/12 sm:grid-cols-3">
         {INTRO.facts.map((f) => (
@@ -37,7 +39,7 @@ export default function IntroScreen({ onStart }: { onStart: () => void }) {
         <button
           type="button"
           onClick={onStart}
-          className="bg-amber px-7 py-4 text-[15px] font-medium text-navy transition-colors hover:bg-amber/90"
+          className="bg-amber px-7 py-4 text-left text-[15px] font-medium text-navy transition-colors hover:bg-amber/90 sm:text-center"
         >
           {INTRO.cta} →
         </button>

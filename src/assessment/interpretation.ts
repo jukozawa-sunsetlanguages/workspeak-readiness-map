@@ -25,7 +25,13 @@ import type {
   TrainingReadinessLevel,
 } from './types'
 
-/* Thresholds on a 0–3 mean. */
+/*
+ * These weights rank self-reported response patterns for MVP interpretation.
+ * They do not represent interval measurement, validated severity, proficiency
+ * or psychometric scoring.
+ *
+ * Thresholds on a 0–3 mean.
+ */
 const STATE_THRESHOLDS: { min: number; state: DimensionState }[] = [
   { min: 2.5, state: 'strong' },
   { min: 1.75, state: 'functional' },
@@ -138,6 +144,7 @@ export function buildMapResult(responses: Responses): MapResult {
 
   return {
     patternName: base.patternName,
+    patternLabel: base.patternLabel,
     observation: base.observation,
     dimensions,
     strongest,

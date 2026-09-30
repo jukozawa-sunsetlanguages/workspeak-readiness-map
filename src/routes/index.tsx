@@ -14,7 +14,7 @@ import QuestionScreen from '../components/QuestionScreen'
 import StepNav from '../components/StepNav'
 import ValidationMessage from '../components/ValidationMessage'
 import ResultsView from '../components/results/ResultsView'
-import { CONTACT_COPY } from '../assessment/content'
+import { CONTACT_COPY, UI } from '../assessment/content'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -69,7 +69,7 @@ function Home() {
   }
 
   function restart() {
-    if (window.confirm('Start again? Your current answers will be cleared.')) {
+    if (window.confirm(UI.restartConfirm)) {
       setError(null)
       setContactErrors({})
       reset()
@@ -125,7 +125,7 @@ function Home() {
             <ValidationMessage message={error} />
             <StepNav
               onBack={() => move(-1)}
-              continueLabel={step.kind === 'contact' ? CONTACT_COPY.cta : 'Continue'}
+              continueLabel={step.kind === 'contact' ? CONTACT_COPY.cta : UI.continue}
             />
           </form>
         </main>

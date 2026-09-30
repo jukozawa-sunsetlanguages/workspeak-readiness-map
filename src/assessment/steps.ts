@@ -2,6 +2,7 @@
  * Derives the screen sequence from the question configuration.
  * One question per screen keeps the flow fast on mobile.
  */
+import { VALIDATION } from './content'
 import type { StageId } from './content'
 import { QUESTIONS_BY_SECTION } from './questions'
 import type { Answer, Question, Responses, SectionId } from './types'
@@ -45,20 +46,18 @@ export const RESULTS_STEP = STEPS.length - 1
 export function validateAnswer(question: Question, answer: Answer | undefined): string | null {
   if (question.kind === 'text') {
     if (question.optional) return null
-    return answer?.text?.trim() ? null : 'Please add a short answer to continue.'
+    return answer?.text?.trim() ? null : VALIDATION.textRequired
   }
   const values = answer?.values ?? []
   if (values.length === 0) {
-    return question.kind === 'multi'
-      ? 'Select at least one option to continue.'
-      : 'Select the option closest to your experience to continue.'
+    return question.kind === 'multi' ? VALIDATION.multiRequired : VALIDATION.singleRequired
   }
   if (question.maxSelections && values.length > question.maxSelections) {
-    return `Select up to ${question.maxSelections} options.`
+    return VALIDATION.tooMany(question.maxSelections)
   }
   const opensText = question.options?.some((o) => o.opensText && values.includes(o.id))
   if (opensText && !answer?.text?.trim()) {
-    return 'Add a few words to describe “Other”, or deselect it.'
+    return VALIDATION.otherText
   }
   return null
 }
@@ -90,10 +89,10 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function validateContact(contact: Responses['contact']): ContactErrors {
   const errors: ContactErrors = {}
-  if (!contact.firstName.trim()) errors.firstName = 'Add your first name.'
-  if (!contact.email.trim()) errors.email = 'Add your email address.'
+  if (!contact.firstName.trim()) errors.firstName = VALIDATION.firstName
+  if (!contact.email.trim()) errors.email = VALIDATION.email
   else if (!EMAIL_PATTERN.test(contact.email.trim()))
-    errors.email = 'This email address does not look complete. Please check it.'
-  if (!contact.role.trim()) errors.role = 'Add your job role or professional area.'
+    errors.email = VALIDATION.emailFormat
+  if (!contact.role.trim()) errors.role = VALIDATION.role
   return errors
 }

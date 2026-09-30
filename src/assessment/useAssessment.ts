@@ -7,7 +7,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { STEPS } from './steps'
 import type { Answer, ContactDetails, Responses, SectionId } from './types'
 
-const STORAGE_KEY = 'workspeak-crm-v1'
+// Bumped when assessment items change so stale answers are not reused.
+const STORAGE_KEY = 'workspeak-crm-v2'
 
 export const EMPTY_RESPONSES: Responses = {
   context: {},
