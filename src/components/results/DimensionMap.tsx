@@ -4,7 +4,7 @@ import { cx } from '../cx'
 
 interface Props {
   dimensions: DimensionReading[]
-  primary: DimensionId
+  primary: DimensionId | null
   secondary: DimensionId | null
 }
 

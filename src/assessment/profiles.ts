@@ -50,7 +50,7 @@ export const PROFILES: Record<DimensionId, Profile> = {
     observation:
       'Entre os comportamentos explorados neste Map, suas respostas apontaram com mais frequência para momentos em que a outra pessoa muda o rumo da conversa. Você relatou mais quebras diante de perguntas de acompanhamento, interrupções ou trechos que não ficaram totalmente claros.',
     hypothesis:
-      'Uma hipótese de trabalho é que o ponto a observar esteja menos no que você diz e mais em sustentar a troca — responder, esclarecer e retomar sua linha de raciocínio quando a conversa muda de direção.',
+      'Uma hipótese de trabalho é que o ponto mais relevante para observar seja a sustentação da troca: responder, esclarecer e retomar sua linha de raciocínio quando a conversa muda de direção.',
     trainingPriority: {
       title: 'Recuperação + continuidade na troca ao vivo',
       detail:
@@ -94,7 +94,7 @@ export const PROFILES: Record<DimensionId, Profile> = {
     patternName: 'Capable, Support-dependent',
     patternLabel: 'Funcional com suporte, sensível à autonomia',
     observation:
-      'Entre os comportamentos explorados neste Map, suas respostas apontaram com mais frequência para o papel do suporte — roteiros, anotações, tradução ou a ajuda de outra pessoa. Você relatou que a comunicação tende a funcionar melhor quando esse suporte está disponível.',
+      'Entre os comportamentos explorados neste Map, suas respostas apontaram com mais frequência para o papel do suporte, como roteiros, anotações, tradução ou a ajuda de outra pessoa. Você relatou que a comunicação tende a funcionar melhor quando esse suporte está disponível.',
     hypothesis:
       'Uma hipótese de trabalho é que a preparação esteja sustentando uma parte grande da sua comunicação. Vale observar o que acontece quando você precisa continuar sem roteiro ou simplificar uma mensagem por conta própria.',
     trainingPriority: {
@@ -138,8 +138,11 @@ export const PROFILES: Record<DimensionId, Profile> = {
   },
 }
 
-/** Used when every dimension is reported as Strong. */
-export const BROADLY_STABLE_PROFILE: Omit<Profile, 'workExamples'> = {
+/**
+ * Used when every dimension is reported as Strong. Its copy and work examples
+ * describe refinement, not a weakness in the numerically lowest dimension.
+ */
+export const BROADLY_STABLE_PROFILE: Profile = {
   patternName: 'Broadly stable, Refinement-focused',
   patternLabel: 'Amplamente estável, foco em refinamento',
   observation:
@@ -150,6 +153,16 @@ export const BROADLY_STABLE_PROFILE: Omit<Profile, 'workExamples'> = {
     title: 'Refinamento direcionado em contextos de alto impacto',
     detail:
       'Um comportamento que vale testar é se a comunicação se mantém tão estável na sua situação mais exigente quanto no uso do dia a dia.',
+  },
+  workExamples: {
+    meetings: 'Vale observar se sua participação se mantém igualmente estável em discussões rápidas, com várias pessoas falando.',
+    interviews: 'Pode ser útil observar se perguntas inesperadas mantêm a mesma precisão das respostas que você preparou.',
+    clients: 'Em conversas com clientes, o refinamento pode estar em ajustar nuance e tom para situações de maior impacto.',
+    presentations: 'Vale observar se a parte de perguntas mantém a mesma estrutura da apresentação planejada.',
+    technical: 'Vale observar se explicações técnicas longas continuam fáceis de acompanhar para públicos menos técnicos.',
+    leadership: 'Pode ser útil observar se suas respostas continuam concisas quando o tempo com a liderança é curto.',
+    networking: 'Vale observar como a conversa se sustenta quando o assunto sai do seu campo profissional.',
+    negotiation: 'Em negociações, o refinamento pode estar em manter precisão quando a conversa fica imprevisível.',
   },
 }
 

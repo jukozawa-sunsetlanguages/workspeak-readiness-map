@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## What this is
-WorkSpeak™ Communication Readiness Map, by Sunset Languages. A single-route (`/`) multi-step self-report assessment built with TanStack Start + Tailwind v4, deployed on Netlify. MVP: no backend, no submission, no auth.
+WorkSpeak™ Communication Readiness Map, by Sunset Languages. A single-route (`/`) multi-step self-report assessment built with TanStack Start + Tailwind v4, deployed on Netlify. MVP: no auth, no database. Completed Maps are emailed (Resend) and recorded in Google Sheets (Apps Script) by one Netlify Function.
 
 ## Architecture — four layers, kept separate
 1. **Content** — `src/assessment/content.ts` (UI copy, labels, stages, dimension names) and `src/assessment/profiles.ts` (result copy keyed by primary dimension, next-step copy).
@@ -9,7 +9,13 @@ WorkSpeak™ Communication Readiness Map, by Sunset Languages. A single-route (`
 3. **Interpretation rules** — `src/assessment/interpretation.ts`. `buildMapResult(responses)` → `MapResult`. Placeholder thresholds; replace freely.
 4. **UI** — `src/components/*` (question/option/progress/contact) and `src/components/results/*`. `src/routes/index.tsx` orchestrates steps.
 
-Supporting: `types.ts` (data model), `steps.ts` (screen sequence derived from config + validation), `useAssessment.ts` (state + sessionStorage persistence), `submission.ts` (empty hook point for future Netlify Forms / Functions + DB).
+Supporting: `types.ts` (data model), `steps.ts` (screen sequence derived from config + validation), `useAssessment.ts` (state + sessionStorage persistence, including delivery state), `submission.ts` (client delivery + retries), `attribution.ts` (UTM/source), `instrument.ts` (`INSTRUMENT_VERSION`, bump when scored items change).
+
+## Delivery (server)
+- `netlify/functions/submit-map.mts` (`POST /api/submit-map`): validates (`src/server/validateSubmission.ts`), recomputes with `buildMapResult`, sends the email (`src/server/resultEmail.ts`), then upserts one Sheets row (`src/server/sheetRow.ts`) with the final email status. Results render client-side first and never wait on this.
+- Idempotency: client-generated `submissionId` + `emailAttempt` → Resend `Idempotency-Key`; Apps Script (`google-apps-script/Code.gs`) upserts by `submissionId`. Keep `SHEET_COLUMNS` and `COLUMNS` in Code.gs in sync.
+- Email and page share copy via `RESULT_COPY` / profiles; never add interpretation logic to the email or the sheet.
+- Env: `RESEND_API_KEY`, `RESULT_EMAIL_FROM`, `RESULT_EMAIL_REPLY_TO`, `GOOGLE_SHEETS_WEBHOOK_URL`, `GOOGLE_SHEETS_WEBHOOK_SECRET` (server only).
 
 ## Data model rules (do not merge these)
 `Responses` has separate buckets: `context` (never scored), `readiness` (ASSESSMENT PATTERN), `friction` (SELF-PERCEIVED FRICTION — never used to compute the pattern), `training` (TRAINING READINESS — separate from communication readiness), `contact`.

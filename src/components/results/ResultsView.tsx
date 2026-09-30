@@ -1,4 +1,11 @@
-import { BOOTCAMP_URL, BRAND, TRAINING_READINESS_LABELS, dimensionName } from '../../assessment/content'
+import type { ReactNode } from 'react'
+import {
+  BOOTCAMP_URL,
+  BRAND,
+  RESULT_COPY,
+  TRAINING_READINESS_LABELS,
+  dimensionName,
+} from '../../assessment/content'
 import { NEXT_STEP_COPY } from '../../assessment/profiles'
 import type { MapResult } from '../../assessment/types'
 import DimensionMap from './DimensionMap'
@@ -11,10 +18,12 @@ interface Props {
   firstName: string
   onRestart: () => void
   onBack: () => void
+  /** Status line for the emailed copy of the result. */
+  delivery?: ReactNode
 }
 
 const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
-  { result, firstName, onRestart, onBack },
+  { result, firstName, onRestart, onBack, delivery },
   headingRef,
 ) {
   const label = dimensionName
@@ -25,7 +34,7 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
     <div className="step-in">
       {/* A. CURRENT REPORTED PATTERN */}
       <ResultBand label={`${BRAND.system} · ${BRAND.product}${firstName ? ` · ${firstName}` : ''}`}>
-        <p className="eyebrow text-offwhite/65">Seu padrão atual relatado</p>
+        <p className="eyebrow text-offwhite/65">{RESULT_COPY.currentPattern}</p>
         <h1
           ref={headingRef}
           tabIndex={-1}
@@ -35,20 +44,25 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
         </h1>
         <div aria-hidden="true" className="mt-8 h-px w-24 bg-amber" />
         <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-offwhite/75">
-          Esta é uma hipótese inicial baseada nas suas respostas — não um diagnóstico de proficiência.
+          {RESULT_COPY.hypothesisNote}
         </p>
+        {delivery}
       </ResultBand>
 
       {/* B. OBSERVATION + D/E/F */}
       <ResultBand tone="offwhite" label="Observação">
-        <h2 className="text-2xl font-semibold sm:text-3xl">O que suas respostas sugerem</h2>
+        <h2 className="text-2xl font-semibold sm:text-3xl">{RESULT_COPY.observation}</h2>
         <p className="mt-5 max-w-3xl text-[17px] leading-relaxed text-graphite">{result.observation}</p>
         <div className="mt-12 grid grid-cols-1 border-b border-graphite/25 sm:grid-cols-3 sm:border-t sm:pt-6 sm:pb-6">
-          <ResultRecord label="Dimensão mais estável" value={label(result.strongest)} />
-          <ResultRecord label="Padrão prioritário para observar" value={label(result.primary)} marked />
+          <ResultRecord label={RESULT_COPY.strongest} value={label(result.strongest)} />
           <ResultRecord
-            label="Padrão secundário para observar"
-            value={result.secondary ? label(result.secondary) : 'Nenhum padrão secundário claro'}
+            label={RESULT_COPY.primary}
+            value={result.primary ? label(result.primary) : RESULT_COPY.noPrimary}
+            marked={!!result.primary}
+          />
+          <ResultRecord
+            label={RESULT_COPY.secondary}
+            value={result.secondary ? label(result.secondary) : RESULT_COPY.noSecondary}
           />
         </div>
       </ResultBand>
@@ -88,7 +102,7 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
             )}
           </div>
           <div>
-            <p className="eyebrow text-offwhite/65">Hipótese de trabalho</p>
+            <p className="eyebrow text-offwhite/65">{RESULT_COPY.hypothesis}</p>
             <h2 className="mt-3 text-xl font-semibold sm:text-2xl">O que o padrão das suas respostas sugere</h2>
             <p className="mt-6 border-t border-offwhite/12 pt-5 text-[16px] leading-relaxed text-offwhite/90">
               {result.hypothesis}
@@ -96,8 +110,8 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
           </div>
         </div>
         <p className="mt-12 max-w-2xl border-l border-offwhite/25 pl-4 text-sm leading-relaxed text-offwhite/65">
-          Essas duas leituras podem coincidir ou não. As duas são úteis. Compará-las ao longo do
-          tempo — com a performance observada — faz parte do método WorkSpeak.
+          Essas duas leituras podem coincidir ou não, e as duas são úteis. Compará-las ao longo do
+          tempo, junto com a performance observada, faz parte do método WorkSpeak.
         </p>
       </ResultBand>
 
@@ -121,12 +135,12 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
       <ResultBand className="border-t border-offwhite/10">
         <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-16">
           <div>
-            <p className="eyebrow text-offwhite/65">Prioridade de treino</p>
+            <p className="eyebrow text-offwhite/65">{RESULT_COPY.trainingPriority}</p>
             <h2 className="mt-4 text-xl leading-snug font-semibold sm:text-2xl">{result.trainingPriority.title}</h2>
             <p className="mt-4 text-[15px] leading-relaxed text-offwhite/80">{result.trainingPriority.detail}</p>
           </div>
           <div>
-            <p className="eyebrow text-offwhite/65">Prontidão para o treino</p>
+            <p className="eyebrow text-offwhite/65">{RESULT_COPY.trainingReadiness}</p>
             <p className="mt-4 flex items-center gap-3 font-heading text-xl font-semibold sm:text-2xl">
               <span aria-hidden="true" className="h-px w-6 bg-offwhite/60" />
               {readiness.label}
@@ -140,13 +154,10 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
       </ResultBand>
 
       {/* L. NEXT EVIDENCE */}
-      <ResultBand tone="strategic" label="Próxima evidência">
-        <h2 className="text-2xl font-semibold sm:text-3xl">O que valeria observar agora?</h2>
+      <ResultBand tone="strategic" label={RESULT_COPY.nextEvidence.label}>
+        <h2 className="text-2xl font-semibold sm:text-3xl">{RESULT_COPY.nextEvidence.title}</h2>
         <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-offwhite/80">
-          Este Map parte do que você relatou sobre sua comunicação e cria uma hipótese inicial. A
-          performance real de comunicação pode oferecer evidências mais fortes. Uma tarefa curta de
-          performance pode ajudar a observar se esse mesmo padrão aparece quando você precisa usar
-          inglês em tempo real.
+          {RESULT_COPY.nextEvidence.body}
         </p>
         <div className="mt-12">
           <EvidencePath />
@@ -154,7 +165,7 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
       </ResultBand>
 
       {/* CONDITIONAL NEXT STEP */}
-      <ResultBand label="Próximo passo">
+      <ResultBand label={RESULT_COPY.nextStep}>
         {next.kind === 'bootcamp-fit' ? (
           <div className="max-w-2xl">
             <h2 className="text-2xl font-semibold sm:text-3xl">{NEXT_STEP_COPY.fit.headline}</h2>
@@ -180,8 +191,7 @@ const ResultsView = forwardRef<HTMLHeadingElement, Props>(function ResultsView(
       <footer className="border-t border-offwhite/10">
         <div className="mx-auto flex max-w-5xl flex-col gap-6 px-5 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p className="max-w-xl text-xs leading-relaxed text-offwhite/60">
-            Este Map é baseado em autorrelato. Não é um teste de proficiência em inglês, uma avaliação
-            CEFR nem um instrumento psicométrico validado. Considere-o uma hipótese de trabalho inicial.
+            {RESULT_COPY.methodNote}
           </p>
           <div className="flex gap-6">
             <button type="button" onClick={onBack} className="text-sm font-medium text-offwhite/75 hover:text-offwhite">

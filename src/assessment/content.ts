@@ -82,14 +82,14 @@ export const SECTION_META: Record<
     title: 'Contexto profissional',
     note: [
       'Onde o inglês precisa funcionar.',
-      'Estas respostas ajudam a contextualizar seu mapa — elas não entram no cálculo das dimensões.',
+      'Estas respostas ajudam a contextualizar seu mapa e não entram no cálculo das dimensões.',
     ],
   },
   readiness: {
     number: '03',
     title: 'Communication Readiness',
     note: [
-      'Escolha a opção que mais se aproxima do que costuma acontecer — não do que você gostaria que acontecesse.',
+      'Escolha a opção que mais se aproxima do que costuma acontecer, e não do que você gostaria que acontecesse.',
     ],
   },
   friction: {
@@ -181,11 +181,11 @@ export const TRAINING_READINESS_LABELS: Record<
   },
   moderate: {
     label: 'Moderada',
-    text: 'Pelo que você relatou, a prática deliberada parece viável com alguns ajustes — por exemplo, reservar tempo na rotina ou se acostumar com gravação e repetição.',
+    text: 'Pelo que você relatou, a prática deliberada parece viável com alguns ajustes, como reservar tempo na rotina ou se acostumar com gravação e repetição.',
   },
   constrained: {
     label: 'Condições atuais limitadas',
-    text: 'Pelo que você relatou, as condições atuais — tempo, ambiente ou acesso prático — podem dificultar uma prática deliberada regular neste momento. Isso descreve circunstâncias, não comprometimento.',
+    text: 'Pelo que você relatou, fatores como tempo, ambiente ou acesso prático podem dificultar uma prática deliberada regular neste momento. Isso descreve circunstâncias, não comprometimento.',
   },
 }
 
@@ -210,9 +210,46 @@ export const CONTACT_COPY = {
     email: 'E-mail',
     role: 'Cargo ou área profissional',
   },
-  usage: 'Suas respostas serão usadas para gerar seu Communication Readiness Map inicial.',
-  // Accurate for the MVP, where nothing is submitted. Update when submission is added.
   privacy:
-    'Nesta versão de teste, seus dados e respostas ficam apenas nesta sessão do navegador. Esta tela não inclui consentimento para comunicações de marketing.',
+    'Usaremos seus dados e respostas para gerar, armazenar e enviar seu Communication Readiness Map.',
+  /** Optional, unchecked by default, and independent of result delivery. */
+  marketingConsent:
+    'Quero receber conteúdos e novidades da Sunset Languages sobre comunicação profissional em inglês.',
   cta: 'Ver meu mapa',
+}
+
+/**
+ * Result labels and fixed result copy. Shared by the on-screen Results and the
+ * result email so both present the same interpretation.
+ */
+export const RESULT_COPY = {
+  currentPattern: 'Seu padrão atual relatado',
+  hypothesisNote:
+    'Esta é uma hipótese inicial baseada nas suas respostas. Não é um diagnóstico de proficiência.',
+  observation: 'O que suas respostas sugerem',
+  strongest: 'Dimensão mais estável',
+  primary: 'Padrão prioritário para observar',
+  secondary: 'Padrão secundário para observar',
+  noPrimary: 'Nenhum padrão prioritário claro',
+  noSecondary: 'Nenhum padrão secundário claro',
+  hypothesis: 'Hipótese de trabalho',
+  trainingPriority: 'Prioridade de treino',
+  trainingReadiness: 'Prontidão para o treino',
+  nextEvidence: {
+    label: 'Próxima evidência',
+    title: 'O que valeria observar agora?',
+    body: 'Este Map parte do que você relatou sobre sua comunicação e cria uma hipótese inicial. A performance real de comunicação pode oferecer evidências mais fortes. Uma tarefa curta de performance pode ajudar a observar se esse mesmo padrão aparece quando você precisa usar inglês em tempo real.',
+  },
+  nextStep: 'Próximo passo',
+  methodNote:
+    'Este Map é baseado em autorrelato. Não é um teste de proficiência em inglês, uma avaliação CEFR nem um instrumento psicométrico validado. Considere-o uma hipótese de trabalho inicial.',
+}
+
+/** Restrained status line for the emailed copy of the result. */
+export const DELIVERY_COPY = {
+  pending: 'Enviando uma cópia do seu mapa por e-mail.',
+  sent: (email: string) => `Enviamos uma cópia do seu mapa para ${email}.`,
+  failed:
+    'Seu resultado está disponível nesta página. Não conseguimos enviar a cópia por e-mail neste momento.',
+  retry: 'Tentar enviar novamente',
 }

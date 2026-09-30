@@ -71,10 +71,10 @@ export const CONTEXT_QUESTIONS: Question[] = [
     kind: 'single',
     prompt: 'Com que frequência você precisa responder sem ter tempo de se preparar?',
     options: [
-      { id: 'rarely', label: 'Raramente — a maioria das situações pode ser preparada' },
-      { id: 'sometimes', label: 'Às vezes — algumas vezes por mês' },
-      { id: 'often', label: 'Com frequência — na maioria das semanas' },
-      { id: 'constantly', label: 'Constantemente — faz parte da maioria das conversas' },
+      { id: 'rarely', label: 'Raramente (a maioria das situações pode ser preparada)' },
+      { id: 'sometimes', label: 'Às vezes (algumas vezes por mês)' },
+      { id: 'often', label: 'Com frequência (na maioria das semanas)' },
+      { id: 'constantly', label: 'Constantemente (faz parte da maioria das conversas)' },
     ],
   },
 ]
@@ -112,7 +112,7 @@ export const READINESS_QUESTIONS: Question[] = [
     dimension: 'clarity',
     kind: 'single',
     prompt:
-      'Quando você precisa explicar o mesmo assunto para interlocutores diferentes — por exemplo, um colega próximo e uma liderança — o que costuma acontecer?',
+      'Quando você precisa explicar o mesmo assunto para interlocutores diferentes (por exemplo, um colega próximo e uma liderança), o que costuma acontecer?',
     options: [
       { id: 'a', weight: 1, label: 'Costumo manter praticamente a mesma explicação, mesmo quando o interlocutor precisaria de outro nível de detalhe.' },
       { id: 'b', weight: 3, label: 'Consigo ajustar o nível de detalhe, os exemplos e a linguagem de acordo com o interlocutor.' },
@@ -259,7 +259,7 @@ export const READINESS_QUESTIONS: Question[] = [
     dimension: 'transfer',
     kind: 'single',
     prompt:
-      'Comparando situações preparadas — como aulas, ensaios ou apresentações planejadas — com situações espontâneas de trabalho, o que costuma acontecer?',
+      'Comparando situações preparadas (como aulas, ensaios ou apresentações planejadas) com situações espontâneas de trabalho, o que costuma acontecer?',
     options: [
       { id: 'a', weight: 1, label: 'Quando estou preparado(a), minha comunicação funciona bem, mas perde bastante estabilidade quando algo sai do planejado.' },
       { id: 'b', weight: 3, label: 'Minha comunicação tende a permanecer relativamente estável nos dois tipos de situação.' },
@@ -321,7 +321,7 @@ export const TRAINING_QUESTIONS: Question[] = [
     prompt:
       'Em uma semana típica, o quanto é realista reservar 15–25 minutos de prática focada na maioria dos dias?',
     options: [
-      { id: 'a', weight: 2, label: 'Realista — consigo reservar esse tempo.' },
+      { id: 'a', weight: 2, label: 'Realista: consigo reservar esse tempo.' },
       { id: 'b', weight: 1, label: 'Possível em alguns dias, mas não na maioria.' },
       { id: 'c', weight: 0, label: 'Difícil no momento, por causa da carga de trabalho ou de outros compromissos.' },
     ],

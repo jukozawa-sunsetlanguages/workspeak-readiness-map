@@ -4,7 +4,7 @@ const STEPS = [
   { label: 'Autorrelato', text: 'O que você descreveu sobre sua comunicação.', done: true },
   { label: 'Hipótese', text: 'O padrão de trabalho que este Map sugere.', done: true },
   { label: 'Performance', text: 'O que aparece quando você se comunica em tempo real.', done: false },
-  { label: 'Evidência', text: 'O que se confirma — ou não — a partir da observação.', done: false },
+  { label: 'Evidência', text: 'O que se confirma, ou não, a partir da observação.', done: false },
 ]
 
 /** AUTORRELATO → HIPÓTESE → PERFORMANCE → EVIDÊNCIA, on the amber line. */

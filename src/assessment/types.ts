@@ -70,6 +70,8 @@ export interface ContactDetails {
   firstName: string
   email: string
   role: string
+  /** Optional opt-in, false by default. Never implied by requesting the result. */
+  marketingConsent: boolean
 }
 
 export interface Responses {
@@ -113,7 +115,8 @@ export interface MapResult {
   observation: string
   dimensions: DimensionReading[]
   strongest: DimensionId
-  primary: DimensionId
+  /** Null when every dimension is Strong: no pattern is singled out. */
+  primary: DimensionId | null
   secondary: DimensionId | null
   hypothesis: string
   workExamples: { context: string; text: string }[]
