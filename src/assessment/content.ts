@@ -28,7 +28,7 @@ export const BRAND = {
 export const WHATSAPP_NUMBER = '+5511977266232'
 
 export const WHATSAPP_MESSAGE =
-  'Oi, Ju! Fiz o Communication Readiness Map e quero entender quais práticas WorkSpeak fazem sentido para o meu resultado.'
+  'Oi, Juliana! Fiz o Communication Readiness Map e quero entender quais práticas WorkSpeak fazem sentido para o meu resultado.'
 
 /** wa.me click-to-chat link with the pre-filled message, or null if unset. */
 export function whatsappUrl(): string | null {
