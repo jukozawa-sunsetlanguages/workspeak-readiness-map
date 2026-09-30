@@ -21,11 +21,11 @@ export const BRAND = {
 
 /**
  * Official WhatsApp number for the result conversation CTA: digits only, with
- * country and area code (e.g. 55 + DDD + number). NOT YET PROVIDED. While it
+ * country and area code (e.g. 55 + DDD + number). While it
  * is empty, the CTA is hidden on the Results page and in the email, so no
  * dead or placeholder link is ever shown.
  */
-export const WHATSAPP_NUMBER = ''
+export const WHATSAPP_NUMBER = '+5511977266232'
 
 export const WHATSAPP_MESSAGE =
   'Oi, Ju! Fiz o Communication Readiness Map e quero entender quais práticas WorkSpeak fazem sentido para o meu resultado.'
