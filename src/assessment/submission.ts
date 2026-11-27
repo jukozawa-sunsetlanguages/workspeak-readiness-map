@@ -7,6 +7,8 @@
  */
 import type { Attribution } from './attribution'
 import type { Responses } from './types'
+import { captureAnswerSnapshot } from './answerSnapshot'
+import { INSTRUMENT_VERSION } from './instrument'
 
 export const SUBMIT_ENDPOINT = '/api/submit-map'
 
@@ -58,7 +60,11 @@ async function post(body: SubmitRequest): Promise<SubmitResponse | null> {
     const res = await fetch(SUBMIT_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        ...body,
+        instrumentVersion: INSTRUMENT_VERSION,
+        answerSnapshot: captureAnswerSnapshot(body.responses),
+      }),
     })
     if (!res.ok) return null
     return (await res.json()) as SubmitResponse

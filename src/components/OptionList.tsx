@@ -24,9 +24,9 @@ export default function OptionList({ question, answer, onChange }: Props) {
     const opensText = options.find((o) => o.id === id)?.opensText
     if (multi) {
       const next = values.includes(id) ? values.filter((v) => v !== id) : [...values, id]
-      onChange({ values: next, text: answer?.text })
+      onChange({ ...answer, values: next, text: answer?.text })
     } else {
-      onChange({ values: [id], text: opensText ? answer?.text : undefined })
+      onChange({ ...answer, values: [id], text: opensText ? answer?.text : undefined })
     }
   }
 

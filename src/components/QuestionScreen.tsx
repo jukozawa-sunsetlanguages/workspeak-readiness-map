@@ -4,6 +4,7 @@ import type { StageId } from '../assessment/content'
 import type { Answer, Question } from '../assessment/types'
 import OptionList from './OptionList'
 import TextAnswer from './TextAnswer'
+import OpenAnswer from './OpenAnswer'
 
 interface Props {
   stage: StageId
@@ -58,6 +59,9 @@ const QuestionScreen = forwardRef<HTMLHeadingElement, Props>(function QuestionSc
           <OptionList question={question} answer={answer} onChange={onChange} />
         )}
       </div>
+      {question.section === 'readiness' && (
+        <OpenAnswer key={question.id} question={question} answer={answer} onChange={onChange} />
+      )}
     </div>
   )
 })

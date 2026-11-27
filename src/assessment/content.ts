@@ -285,3 +285,10 @@ export const DELIVERY_COPY = {
     'Seu resultado está disponível nesta página. Não conseguimos enviar a cópia por e-mail neste momento.',
   retry: 'Tentar enviar novamente',
 }
+
+/** Optional behavioral context: never part of interpretation or validation of choice. */
+export const OPEN_ANSWER_COPY = {
+  summary: 'Nenhuma alternativa descreve exatamente sua realidade?',
+  helper: 'Se quiser, descreva como você costuma agir nessa situação.',
+  placeholder: 'Na minha realidade, costumo...',
+} as const
