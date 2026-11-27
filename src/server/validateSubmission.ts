@@ -4,16 +4,21 @@
  * browser's values are never trusted as-is.
  */
 import type { Attribution } from '../assessment/attribution'
+import { captureAnswerSnapshot } from '../assessment/answerSnapshot'
+import type { AnswerSnapshot } from '../assessment/answerSnapshot'
+import { INSTRUMENT_VERSION, LEGACY_INSTRUMENT_VERSION, MAX_OPEN_TEXT_LENGTH } from '../assessment/instrument'
 import { QUESTIONS_BY_SECTION } from '../assessment/questions'
 import { validateAnswer, validateContact } from '../assessment/steps'
 import { MAX_EMAIL_ATTEMPTS } from '../assessment/submission'
 import type { Answer, Responses, SectionAnswers, SectionId } from '../assessment/types'
 
-export const MAX_BODY_BYTES = 32 * 1024
+export const MAX_BODY_BYTES = 128 * 1024
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 export interface ValidSubmission {
+  instrumentVersion: string
+  answerSnapshot: AnswerSnapshot
   submissionId: string
   emailAttempt: number
   responses: Responses
@@ -29,6 +34,12 @@ export function cleanText(value: unknown, max: number): string {
   return value.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().slice(0, max)
 }
 
+/** Free-text answers may contain line breaks; contact/header fields use cleanText. */
+function cleanAnswerText(value: unknown, max: number): string {
+  if (typeof value !== 'string') return ''
+  return value.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, '').trim().slice(0, max)
+}
+
 function cleanSection(section: SectionId, raw: unknown): SectionAnswers | string {
   const input = isObj(raw) ? raw : {}
   const out: SectionAnswers = {}
@@ -41,9 +52,14 @@ function cleanSection(section: SectionId, raw: unknown): SectionAnswers | string
     const answer: Answer = {
       values: question.kind === 'single' ? values.slice(0, 1) : values,
     }
-    const text = cleanText(given.text, question.kind === 'text' ? 240 : 120)
+    const text = cleanAnswerText(given.text, question.kind === 'text' ? 240 : 120)
     const opensText = question.options?.some((o) => o.opensText && answer.values.includes(o.id))
     if (text && (question.kind === 'text' || opensText)) answer.text = text
+    if (section === 'readiness' && typeof given.openText === 'string') {
+      if (given.openText.length > MAX_OPEN_TEXT_LENGTH) return `${question.id}: openText_too_long`
+      // Preserve accents, line breaks and tabs. Strip only non-text controls.
+      answer.openText = given.openText.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, '')
+    }
 
     const problem = validateAnswer(question, answer)
     if (problem) return `${question.id}: ${problem}`
@@ -56,6 +72,11 @@ export function validateSubmission(
   body: unknown,
 ): { ok: true; value: ValidSubmission } | { ok: false; reason: string } {
   if (!isObj(body)) return { ok: false, reason: 'body' }
+  // Older clients did not send a version or snapshot. Their storage format stays CRM-v1.
+  const instrumentVersion = body.instrumentVersion ?? LEGACY_INSTRUMENT_VERSION
+  if (instrumentVersion !== INSTRUMENT_VERSION && instrumentVersion !== LEGACY_INSTRUMENT_VERSION) {
+    return { ok: false, reason: 'instrumentVersion' }
+  }
   const submissionId = typeof body.submissionId === 'string' ? body.submissionId : ''
   if (!UUID.test(submissionId)) return { ok: false, reason: 'submissionId' }
 
@@ -89,8 +110,19 @@ export function validateSubmission(
     utmCampaign: cleanText(a.utmCampaign, 200),
   }
 
+  const responses = { ...sections, contact }
+  const answerSnapshot = captureAnswerSnapshot(responses)
+  if (instrumentVersion === INSTRUMENT_VERSION) {
+    if (!isObj(body.answerSnapshot)) return { ok: false, reason: 'answerSnapshot' }
+    for (const [id, labels] of Object.entries(answerSnapshot)) {
+      if (JSON.stringify(body.answerSnapshot[id]) !== JSON.stringify(labels)) {
+        return { ok: false, reason: `answerSnapshot:${id}` }
+      }
+    }
+  }
+
   return {
     ok: true,
-    value: { submissionId, emailAttempt, responses: { ...sections, contact }, attribution },
+    value: { submissionId, emailAttempt, responses, attribution, instrumentVersion, answerSnapshot },
   }
 }

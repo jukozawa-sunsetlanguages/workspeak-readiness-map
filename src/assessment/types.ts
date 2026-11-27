@@ -62,6 +62,8 @@ export interface Question {
 export interface Answer {
   values: string[]
   text?: string
+  /** Optional behavioral context; never used by interpretation rules. */
+  openText?: string
 }
 
 export type SectionAnswers = Record<string, Answer>

@@ -10,8 +10,8 @@
  * - Maps values by header name, so column order in the sheet does not matter;
  *   unknown keys are ignored and missing keys are left blank.
  * - Upserts by submissionId: a retry updates the existing row instead of
- *   appending a duplicate, keeping the original submittedAt and never
- *   downgrading a "sent" email status.
+ *   appending a duplicate. Only email delivery status can be updated; collected
+ *   data stays immutable and a "sent" status is never downgraded.
  * - Performs no assessment logic. The application is the source of results.
  */
 
@@ -20,24 +20,71 @@ var SHEET_NAME = 'Responses';
 // Used only to write the header row if the sheet is completely empty.
 // Mirrors SHEET_COLUMNS in src/server/sheetRow.ts.
 var COLUMNS = [
-  'submissionId', 'submittedAt', 'instrumentVersion',
-  'name', 'email', 'roleArea', 'marketingConsent',
-  'professionalContexts', 'englishUseFrequency', 'spontaneousCommunicationPattern',
-  'q1Clarity', 'q2Clarity', 'q3Interaction', 'q4Interaction', 'q5Interaction',
-  'q6AccessUnderPressure', 'q7AccessUnderPressure', 'q8AccessUnderPressure',
-  'q9Independence', 'q10Independence', 'q11Transfer', 'q12Transfer',
-  'perceivedFrictions', 'thirtyDayGoal',
-  'trainingReadinessResponses', 'trainingReadinessLabel',
-  'clarityScore', 'interactionScore', 'accessUnderPressureScore', 'independenceScore', 'transferScore',
-  'currentPattern', 'strongestDimension', 'primaryPatternToObserve', 'secondaryPatternToObserve',
-  'recommendedTrainingFocus', 'bootcampFit',
-  'resultEmailStatus', 'resultEmailSentAt',
-  'source', 'utmSource', 'utmMedium', 'utmCampaign',
-  'notes'
+  'submissionId',
+  'submittedAt',
+  'instrumentVersion',
+  'name',
+  'email',
+  'roleArea',
+  'marketingConsent',
+  'professionalContexts',
+  'englishUseFrequency',
+  'spontaneousCommunicationPattern',
+  'q1Clarity',
+  'q1ClarityOpen',
+  'q2Clarity',
+  'q2ClarityOpen',
+  'q3Interaction',
+  'q3InteractionOpen',
+  'q4Interaction',
+  'q4InteractionOpen',
+  'q5Interaction',
+  'q5InteractionOpen',
+  'q6AccessUnderPressure',
+  'q6AccessUnderPressureOpen',
+  'q7AccessUnderPressure',
+  'q7AccessUnderPressureOpen',
+  'q8AccessUnderPressure',
+  'q8AccessUnderPressureOpen',
+  'q9Independence',
+  'q9IndependenceOpen',
+  'q10Independence',
+  'q10IndependenceOpen',
+  'q11Transfer',
+  'q11TransferOpen',
+  'q12Transfer',
+  'q12TransferOpen',
+  'perceivedFrictions',
+  'thirtyDayGoal',
+  'trainingReadinessResponses',
+  'trainingReadinessLabel',
+  'clarityScore',
+  'interactionScore',
+  'accessUnderPressureScore',
+  'independenceScore',
+  'transferScore',
+  'currentPattern',
+  'strongestDimension',
+  'primaryPatternToObserve',
+  'secondaryPatternToObserve',
+  'recommendedTrainingFocus',
+  'bootcampFit',
+  'resultEmailStatus',
+  'resultEmailSentAt',
+  'source',
+  'utmSource',
+  'utmMedium',
+  'utmCampaign',
+  'notes',
+  'mostDemandingContext',
+  'trainingReadinessTime',
+  'trainingReadinessRepetition',
+  'trainingReadinessRecording',
+  'trainingReadinessWeaknessExposed',
+  'trainingReadinessFeedback',
+  'technicalResponses',
 ];
 
-// Kept from the first write when a submission is updated.
-var PRESERVE_ON_UPDATE = ['submittedAt'];
 
 function doPost(e) {
   try {
@@ -77,29 +124,39 @@ function upsert_(row) {
   var idIndex = headers.indexOf('submissionId');
   if (idIndex < 0) return { ok: false, error: 'missing_submissionId_column' };
 
-  var values = headers.map(function (h) {
-    return Object.prototype.hasOwnProperty.call(row, h) && row[h] !== null ? row[h] : '';
-  });
-
+  if (new Set(headers).size !== headers.length) return { ok: false, error: 'duplicate_headers' };
   var existingRow = findRow_(sheet, idIndex + 1, row.submissionId);
   if (existingRow) {
-    var range = sheet.getRange(existingRow, 1, 1, headers.length);
-    var current = range.getValues()[0];
-    headers.forEach(function (h, i) {
-      if (PRESERVE_ON_UPDATE.indexOf(h) >= 0 && current[i] !== '') values[i] = current[i];
-    });
+    // Retry writes delivery status only. Collected data and trainer notes stay intact.
     var statusIndex = headers.indexOf('resultEmailStatus');
     var sentAtIndex = headers.indexOf('resultEmailSentAt');
-    if (statusIndex >= 0 && current[statusIndex] === 'sent' && values[statusIndex] !== 'sent') {
-      values[statusIndex] = current[statusIndex];
-      if (sentAtIndex >= 0) values[sentAtIndex] = current[sentAtIndex];
+    if (statusIndex >= 0) {
+      var statusCell = sheet.getRange(existingRow, statusIndex + 1);
+      var currentStatus = statusCell.getValue();
+      if (currentStatus !== 'sent' && (row.resultEmailStatus === 'sent' || row.resultEmailStatus === 'failed')) {
+        statusCell.setValue(row.resultEmailStatus);
+        if (sentAtIndex >= 0 && row.resultEmailStatus === 'sent') {
+          sheet.getRange(existingRow, sentAtIndex + 1).setValue(safeCell_(row.resultEmailSentAt || ''));
+        }
+      }
     }
-    range.setValues([values]);
     return { ok: true, action: 'updated' };
   }
-
+  // Never silently drop CRM-v2 fields when the schema upgrade is incomplete.
+  if (row.instrumentVersion === 'CRM-v2' && COLUMNS.some(function (h) { return headers.indexOf(h) < 0; })) {
+    return { ok: false, error: 'schema_upgrade_required' };
+  }
+  var values = headers.map(function (h) {
+    return safeCell_(Object.prototype.hasOwnProperty.call(row, h) && row[h] !== null ? row[h] : '');
+  });
   sheet.appendRow(values);
   return { ok: true, action: 'appended' };
+}
+
+/** Guard every write, including payloads from older application code. */
+function safeCell_(value) {
+  if (typeof value !== 'string') return value;
+  return /^(?:[=+\-@\t\r\n]|\s+[=+\-@])/.test(value) ? "'" + value : value;
 }
 
 function findRow_(sheet, column, submissionId) {

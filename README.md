@@ -28,3 +28,21 @@ netlify dev   # or: pnpm dev
 - Result copy: `src/assessment/profiles.ts`
 - Interpretation thresholds: `src/assessment/interpretation.ts`
 - Interface copy and labels: `src/assessment/content.ts`
+
+## CRM-v2 — collection and response storage
+
+The 12 behavioral questions now have an optional expandable complement. Selected
+option IDs still drive the existing assessment. New submissions store selected labels
+for human review and retain IDs in a separate technical JSON record.
+
+See [architecture, schema, verification and deployment](docs/response-refinement.md).
+
+Development checks (Node.js 24 for the built-in test loader):
+
+```bash
+pnpm test
+pnpm build
+pnpm typecheck # run after build generates routeTree.gen.ts
+```
+
+Tests mock email and spreadsheet delivery; they do not contact leads or production Sheets.
